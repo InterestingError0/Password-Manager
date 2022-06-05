@@ -348,3 +348,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/Password Manager/folders.txt
+/Password Manager/logins.txt
+/Password Manager/passwordGeneratorHistory.txt
+/Password Manager/secureNotes.txt
