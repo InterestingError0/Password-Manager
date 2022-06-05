@@ -1,2 +1,2 @@
 # Password-Manager
-A password manager I made usig C++
+A password manager I made using C++
