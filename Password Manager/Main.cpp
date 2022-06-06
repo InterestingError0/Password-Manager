@@ -225,7 +225,7 @@ int main() {
 			break;
 			case 2:
 				std::string inputFolderName{ getFolderNameFromUser(folders) };
-				if(inputFolderName == "None") {
+				if(inputFolderName != "None") {
 					deleteFolder(folders, inputFolderName);
 					std::cout << "Folder successfully deleted!\n";
 					writeFoldersToFile(folders, foldersPath);
