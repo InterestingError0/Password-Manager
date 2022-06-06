@@ -216,8 +216,7 @@ int main() {
 			switch(menuChoice(1, 3)) {
 			case 1:
 			{
-				std::string folder{ getFolderNameFromUser(folders) };
-				if(checkIfFolderIsDuplicate(folders, folder)) {
+				if(checkIfFolderIsDuplicate(folders, getFolderNameFromUser(folders))) {
 					std::cout << "Folder already exists!\n\n";
 				} else {
 					folders.push_back(getFolderNameFromUser(folders));
