@@ -68,6 +68,7 @@ int main() {
 			switch(menuChoice(1, 3)) {
 			case 1:
 			{
+				printFolders(folders);
 				std::array <std::string, 4> login{ getFolderNameFromUser(folders) };
 				std::cout << "Enter the web address followed by the username followed by the password: ";
 				std::cin >> login[1] >> login[2] >> login[3];
@@ -171,6 +172,7 @@ int main() {
 			switch(menuChoice(1, 3)) {
 			case 1:
 			{
+				printFolders(folders);
 				std::array <std::string, 3> secureNote{ getFolderNameFromUser(folders) };
 				std::cout << "Enter the title: ";
 				std::getline(std::cin >> std::ws, secureNote[1]);
