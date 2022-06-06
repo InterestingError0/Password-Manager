@@ -89,15 +89,15 @@ int main() {
 						std::string inputUsername{ "" };
 						std::cin >> inputWebAddress >> inputUsername;
 						if(deleteLoginIfLoginExists(logins, inputWebAddress, inputUsername)) {
-							std::cout << "Login successfully deleted!\n";
+							std::cout << "Login successfully deleted!\n\n";
 							writeLoginsToFile(logins, loginsPath);
 							loginExists = true;
 						} else {
-							std::cout << "Login doesn't exist!\n";
+							std::cout << "Login doesn't exist!\n\n";
 						}
 					} while(!loginExists);
 				} else {
-					std::cout << "No logins have been stored in your vault!\n";
+					std::cout << "No logins have been stored in your vault!\n\n";
 				}
 				break;
 			}
@@ -158,11 +158,11 @@ int main() {
 				std::cout << "\n\t1. Delete Password Generator History\n\t2. Go Back To Main Menu\n\n";
 				if(menuChoice(1, 2) == 1) {
 					deletePasswordGeneratorHistory(passwordGeneratorHistory);
-					std::cout << "Password generator history has been deleted!\n";
+					std::cout << "Password generator history has been deleted!\n\n";
 					writePasswordGeneratorHistoryToFile(passwordGeneratorHistory, passwordGeneratorHistoryPath);
 				}
 			} else {
-				std::cout << "No passwords have been generated!\n";
+				std::cout << "No passwords have been generated!\n\n";
 			}
 			break;
 		case 4:
@@ -195,15 +195,15 @@ int main() {
 						std::string inputTitle{ "" };
 						std::getline(std::cin >> std::ws, inputTitle);
 						if(deleteSecureNoteIfSecureNoteExists(secureNotes, inputTitle)) {
-							std::cout << "Secure note successfully deleted!\n";
+							std::cout << "Secure note successfully deleted!\n\n";
 							writeSecureNotesToFile(secureNotes, secureNotesPath);
 							secureNoteExists = true;
 						} else {
-							std::cout << "Secure Note Doesn't Exist!\n";
+							std::cout << "Secure Note Doesn't Exist!\n\n";
 						}
 					} while(!secureNoteExists);
 				} else {
-					std::cout << "No secure notes have been stored in your vault!\n";
+					std::cout << "No secure notes have been stored in your vault!\n\n";
 				}
 			}
 			break;
@@ -228,10 +228,10 @@ int main() {
 				std::string inputFolderName{ getFolderNameFromUser(folders) };
 				if(inputFolderName != "None") {
 					deleteFolder(folders, inputFolderName);
-					std::cout << "Folder successfully deleted!\n";
+					std::cout << "Folder successfully deleted!\n\n";
 					writeFoldersToFile(folders, foldersPath);
 				} else {
-					std::cout << "ERROR: Cannot delete that folder! Access Denied!\n";
+					std::cout << "ERROR: Cannot delete that folder! Access Denied!\n\n";
 				}
 				break;
 			}
