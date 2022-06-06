@@ -112,7 +112,6 @@ std::string getFolderNameFromUser(const std::vector <std::string>& folders) {
 	while((std::cout << "Enter the folder name: ") && (std::cin >> folderName) && std::find(folders.begin(), folders.end(), folderName) == folders.end()) {
 		std::cout << "Invalid Input!\n\n";
 	}
-	std::cout << '\n';
 	return folderName;
 }
 
@@ -262,6 +261,7 @@ bool printLoginsInFolder(const std::vector <std::array <std::string, 4>>& logins
 }
 
 void printPasswordGeneratorHistory(const std::vector <std::string>& passwordGeneratorHistory) {
+	std::cout << '\n';
 	for(const std::string& x : passwordGeneratorHistory) {
 		std::cout << x << '\n';
 	}
@@ -288,7 +288,7 @@ bool printSecureNotesInFolder(const std::vector <std::array <std::string, 3>>& s
 void printFolders(const std::vector <std::string>& folders) {
 	std::cout << "Here are the folders currently available:\n\n";
 	for(const std::string& folder : folders) {
-		std::cout << '\t' << folder << '\n';
+		std::cout << folder << '\n';
 	}
 	std::cout << '\n';
 }
