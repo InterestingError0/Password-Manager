@@ -242,7 +242,7 @@ bool checkIfFolderIsDuplicate(const std::vector <std::string>& folders, const st
 }
 
 void printAllLogins(const std::vector <std::array <std::string, 4>>& logins) {
-	std::cout << "Here are the logins stored in your valut:\n\n";
+	std::cout << "Here are the logins stored in your vault:\n\n";
 	for(int i{ 0 }; i < logins.size(); i++) {
 		std::cout << "Folder: " << logins[i][0] << "\nWeb Address: " << logins[i][1] << "\nUsername: " << logins[i][2] << "\nPassword: " << logins[i][3] << "\n\n";
 	}
