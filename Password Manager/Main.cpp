@@ -105,15 +105,15 @@ int main() {
 		break;
 		case 2:
 		{
-			int lengthOfGeneratedPassword;
+			int lengthOfGeneratedPassword{ 0 };
 			while((std::cout << "Enter the length of the generated password: ") && !(std::cin >> lengthOfGeneratedPassword) || lengthOfGeneratedPassword <= 0) {
 				std::cout << "Invalid Input!\n\n";
 				clearInputBuffer();
 			}
-			int includeSmybols;
-			int includeNumbers;
-			int includeUppercaseLetters;
-			int includeLowercaseLetters;
+			int includeSmybols{ 0 };
+			int includeNumbers{ 0 };
+			int includeUppercaseLetters{ 0 };
+			int includeLowercaseLetters{ 0 };
 			do {
 				while((std::cout << "Enter '1' to include symbols, '0' to exclude symbols: ") && !(std::cin >> includeSmybols) || (includeSmybols != 1 && includeSmybols != 0)) {
 					std::cout << "Invalid Input!\n\n";
