@@ -64,7 +64,7 @@ int main() {
 		case 1:
 		{
 			printAllLogins(logins);
-			std::cout << "\t1. Store Logins\n\t2. Delete Logins\n\t3. Go back to main menu\n\n";
+			std::cout << "\t1. Store Logins\n\t2. Delete Logins\n\t3. Back to the Main Menu\n\n";
 			switch(menuChoice(1, 3)) {
 			case 1:
 			{
@@ -155,7 +155,7 @@ int main() {
 		case 3:
 			if(passwordGeneratorHistory.size()) {
 				printPasswordGeneratorHistory(passwordGeneratorHistory);
-				std::cout << "\n\t1. Delete Password Generator History\n\t2. Go Back To Main Menu\n\n";
+				std::cout << "\n\t1. Delete Password Generator History\n\t2. Back to the Main Menu\n\n";
 				if(menuChoice(1, 2) == 1) {
 					deletePasswordGeneratorHistory(passwordGeneratorHistory);
 					std::cout << "Password generator history has been deleted!\n\n";
@@ -168,7 +168,7 @@ int main() {
 		case 4:
 		{
 			printAllSecureNotes(secureNotes);
-			std::cout << "\t1. Store Secure Notes\n\t2. Delete Secure Notes\n\t3. Go back to main menu\n\n";
+			std::cout << "\t1. Store Secure Notes\n\t2. Delete Secure Notes\n\t3. Back to the Main Menu\n\n";
 			switch(menuChoice(1, 3)) {
 			case 1:
 			{
@@ -212,7 +212,7 @@ int main() {
 		break;
 		case 5:
 			printFolders(folders);
-			std::cout << "\t1. Add Folders\n\t2. Delete Folders\n\t3. Go back to main menu\n\n";
+			std::cout << "\t1. Add Folders\n\t2. Delete Folders\n\t3. Back to the Main Menu\n\n";
 			switch(menuChoice(1, 3)) {
 			case 1:
 			{
