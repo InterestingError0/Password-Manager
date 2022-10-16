@@ -53,29 +53,26 @@ bool checkIfPasswordMeetsRequirements(const std::string& masterPassword) {
 	return passwordMeetsRequirements;
 }
 
-std::pair <std::string, std::string> hash(std::string& masterPassword, const std::string& salt) {
+std::pair <std::string, std::string> hash(std::string& masterPassword, std::string salt) {
 	std::string encoded;
 	CryptoPP::Base64Encoder encoder;
 	CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::Pad(), false)(CryptoPP::Name::InsertLineBreaks(), false);
 	encoder.IsolatedInitialize(params);
 	encoder.Attach(new CryptoPP::StringSink(encoded));
-	std::string eSalt{ "" };
 	if(salt == "") {
 		CryptoPP::AutoSeededRandomPool rng;
 		CryptoPP::byte gSalt[32];
 		rng.GenerateBlock(gSalt, 32);
 		CryptoPP::StringSource ss1(gSalt, 32, true, new CryptoPP::Redirector(encoder));
-		eSalt = encoded;
-	} else {
-		eSalt = salt;
+		salt = encoded;
 	}
-	masterPassword += eSalt;
+	masterPassword += salt;
 	CryptoPP::Scrypt scrypt;
 	CryptoPP::SecByteBlock derived(32);
-	scrypt.DeriveKey(derived, derived.size(), (const CryptoPP::byte*)&masterPassword[0], masterPassword.size(), (const CryptoPP::byte*)&eSalt[0], eSalt.size(), 16384, 16, 16);
+	scrypt.DeriveKey(derived, derived.size(), (const CryptoPP::byte*)&masterPassword[0], masterPassword.size(), (const CryptoPP::byte*)&salt[0], salt.size(), 16384, 16, 16);
 	encoded = "";
 	CryptoPP::StringSource ss2(derived, 32, true, new CryptoPP::Redirector(encoder));
-	return std::make_pair(encoded, eSalt);
+	return std::make_pair(encoded, salt);
 }
 
 void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAndSalt, const fs::path& masterPasswordPath) {
