@@ -75,8 +75,7 @@ std::pair <std::string, std::string> hash(std::string& masterPassword, const std
 	scrypt.DeriveKey(derived, derived.size(), (const CryptoPP::byte*)&masterPassword[0], masterPassword.size(), (const CryptoPP::byte*)&eSalt[0], eSalt.size(), 16384, 16, 16);
 	encoded = "";
 	CryptoPP::StringSource ss2(derived, 32, true, new CryptoPP::Redirector(encoder));
-	std::string hash = encoded;
-	return std::make_pair(hash, eSalt);
+	return std::make_pair(encoded, eSalt);
 }
 
 void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAndSalt, const fs::path& masterPasswordPath) {
