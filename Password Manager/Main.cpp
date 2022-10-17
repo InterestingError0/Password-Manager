@@ -85,8 +85,8 @@ int main() {
 					bool loginExists{ false };
 					do {
 						std::cout << "Enter the web address followed by the username: ";
-						std::string inputWebAddress{ "" };
-						std::string inputUsername{ "" };
+						std::string inputWebAddress;
+						std::string inputUsername;
 						std::cin >> inputWebAddress >> inputUsername;
 						if(deleteLoginIfLoginExists(logins, inputWebAddress, inputUsername)) {
 							std::cout << "Login successfully deleted!\n\n";
@@ -132,7 +132,7 @@ int main() {
 					clearInputBuffer();
 				}
 			} while(!(includeSmybols || includeNumbers || includeUppercaseLetters || includeLowercaseLetters) && (std::wcout << "Invalid Inputs!\n\n"));
-			std::string generatedPassword{ "" };
+			std::string generatedPassword;
 			for(int x{ 0 }; x < lengthOfGeneratedPassword; x++) {
 				char character{ generateCharacter() };
 				if(includeSmybols && (character >= 33 && character <= 47 || character >= 58 && character <= 64 || character >= 91 && character <= 96 || character >= 123 && character <= 126)) {
@@ -192,7 +192,7 @@ int main() {
 					bool secureNoteExists{ false };
 					do {
 						std::cout << "Enter the title of the secure note you want to delete: ";
-						std::string inputTitle{ "" };
+						std::string inputTitle;
 						std::getline(std::cin >> std::ws, inputTitle);
 						if(deleteSecureNoteIfSecureNoteExists(secureNotes, inputTitle)) {
 							std::cout << "Secure note successfully deleted!\n\n";

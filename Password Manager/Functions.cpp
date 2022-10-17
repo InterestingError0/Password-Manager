@@ -91,9 +91,9 @@ int menuChoice(int lowerBound, int upperBound) {
 
 bool checkIfEnteredMasterPasswordIsValid(std::string& tempMasterPassword, const fs::path& masterPasswordPath) {
 	std::ifstream iMasterPassword(masterPasswordPath);
-	std::string masterPasswordHash{ "" };
+	std::string masterPasswordHash;
 	std::getline(iMasterPassword, masterPasswordHash);
-	std::string salt{ "" };
+	std::string salt;
 	std::getline(iMasterPassword, salt);
 	if(hash(tempMasterPassword, salt).first == masterPasswordHash) {
 		return true;
@@ -103,7 +103,7 @@ bool checkIfEnteredMasterPasswordIsValid(std::string& tempMasterPassword, const 
 
 
 std::string getFolderNameFromUser(const std::vector <std::string>& folders) {
-	std::string folderName{ "" };
+	std::string folderName;
 	while((std::cout << "Enter the folder name: ") && (std::cin >> folderName) && std::ranges::find(folders, folderName) == folders.end()) {
 		std::cout << "Invalid Input!\n\n";
 	}
@@ -112,7 +112,7 @@ std::string getFolderNameFromUser(const std::vector <std::string>& folders) {
 
 void readFoldersIntoVector(std::vector <std::string>& folders, const fs::path& foldersPath) {
 	std::ifstream iFolders(foldersPath);
-	std::string folderName{ "" };
+	std::string folderName;
 	while(std::getline(iFolders, folderName)) {
 		folders.push_back(folderName);
 	}
@@ -131,7 +131,7 @@ void readLoginsIntoVector(std::vector <std::array <std::string, 4>>& logins, con
 
 void readPasswordGeneratorHistoryIntoVector(std::vector <std::string>& passwordGeneratorHistory, const fs::path& passwordGeneratorHistoryPath) {
 	std::ifstream iPasswordGeneratorHistory(passwordGeneratorHistoryPath);
-	std::string generatedPassword{ "" };
+	std::string generatedPassword;
 	while(std::getline(iPasswordGeneratorHistory, generatedPassword)) {
 		passwordGeneratorHistory.push_back(generatedPassword);
 	}
