@@ -110,12 +110,12 @@ int main() {
 				std::cout << "Invalid Input!\n\n";
 				clearInputBuffer();
 			}
-			int includeSmybols{ 0 };
+			int includeSymbols{ 0 };
 			int includeNumbers{ 0 };
 			int includeUppercaseLetters{ 0 };
 			int includeLowercaseLetters{ 0 };
 			do {
-				while((std::cout << "Enter '1' to include symbols, '0' to exclude symbols: ") && !(std::cin >> includeSmybols) || (includeSmybols != 1 && includeSmybols != 0)) {
+				while((std::cout << "Enter '1' to include symbols, '0' to exclude symbols: ") && !(std::cin >> includeSymbols) || (includeSymbols != 1 && includeSymbols != 0)) {
 					std::cout << "Invalid Input!\n\n";
 					clearInputBuffer();
 				}
@@ -131,11 +131,11 @@ int main() {
 					std::cout << "Invalid Input!\n\n";
 					clearInputBuffer();
 				}
-			} while(!(includeSmybols || includeNumbers || includeUppercaseLetters || includeLowercaseLetters) && (std::wcout << "Invalid Inputs!\n\n"));
+			} while(!(includeSymbols || includeNumbers || includeUppercaseLetters || includeLowercaseLetters) && (std::wcout << "Invalid Inputs!\n\n"));
 			std::string generatedPassword;
 			for(int x{ 0 }; x < lengthOfGeneratedPassword; x++) {
 				char character{ generateCharacter() };
-				if(includeSmybols && (character >= 33 && character <= 47 || character >= 58 && character <= 64 || character >= 91 && character <= 96 || character >= 123 && character <= 126)) {
+				if(includeSymbols && (character >= 33 && character <= 47 || character >= 58 && character <= 64 || character >= 91 && character <= 96 || character >= 123 && character <= 126)) {
 					generatedPassword += character;
 				} else if(includeNumbers && (character >= 48 && character <= 57)) {
 					generatedPassword += character;
