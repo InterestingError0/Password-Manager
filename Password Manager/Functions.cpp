@@ -59,7 +59,7 @@ std::pair <std::string, std::string> hash(std::string& masterPassword, std::stri
 	CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::Pad(), false)(CryptoPP::Name::InsertLineBreaks(), false);
 	encoder.IsolatedInitialize(params);
 	encoder.Attach(new CryptoPP::StringSink(encoded));
-	if(salt == "") {
+	if(salt.empty()) {
 		CryptoPP::AutoSeededRandomPool rng;
 		CryptoPP::byte gSalt[32];
 		rng.GenerateBlock(gSalt, 32);

@@ -81,7 +81,7 @@ int main() {
 			}
 			break;
 			case 2:
-				if(logins.size()) {
+				if(!logins.empty()) {
 					bool loginExists{ false };
 					do {
 						std::cout << "Enter the web address followed by the username: ";
@@ -153,7 +153,7 @@ int main() {
 		}
 		break;
 		case 3:
-			if(passwordGeneratorHistory.size()) {
+			if(!passwordGeneratorHistory.empty()) {
 				printPasswordGeneratorHistory(passwordGeneratorHistory);
 				std::cout << "\n\t1. Delete Password Generator History\n\t2. Back to the Main Menu\n\n";
 				if(menuChoice(1, 2) == 1) {
@@ -188,7 +188,7 @@ int main() {
 			break;
 			case 2:
 			{
-				if(secureNotes.size()) {
+				if(!secureNotes.empty()) {
 					bool secureNoteExists{ false };
 					do {
 						std::cout << "Enter the title of the secure note you want to delete: ";
