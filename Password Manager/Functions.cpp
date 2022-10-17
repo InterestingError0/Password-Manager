@@ -180,7 +180,7 @@ void writeSecureNotesToFile(const std::vector<std::array <std::string, 3>>& secu
 }
 
 bool deleteLoginIfLoginExists(std::vector <std::array <std::string, 4>>& logins, const std::string& webAddress, const std::string& username) {
-	for(auto it{ logins.begin() }; it != logins.end(); it++) {
+	for(auto it{ logins.begin() }; it != logins.end(); ++it) {
 		if((*it)[1] == webAddress && (*it)[2] == username) {
 			logins.erase(it);
 			return true;
@@ -194,7 +194,7 @@ void deletePasswordGeneratorHistory(std::vector<std::string>& passwordGeneratorH
 }
 
 bool deleteSecureNoteIfSecureNoteExists(std::vector <std::array <std::string, 3>>& secureNotes, const std::string& title) {
-	for(auto it{ secureNotes.begin() }; it != secureNotes.end(); it++) {
+	for(auto it{ secureNotes.begin() }; it != secureNotes.end(); ++it) {
 		if((*it)[1] == title) {
 			secureNotes.erase(it);
 			return true;
