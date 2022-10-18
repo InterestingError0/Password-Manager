@@ -11,7 +11,7 @@ namespace fs = std::filesystem;
 
 int main() {
 	const fs::path masterPasswordPath{ "masterPassword.txt" };
-	if(!fs::exists(masterPasswordPath)) {
+	if(!exists(masterPasswordPath)) {
 		std::string masterPassword;
 		do {
 			std::cout << "Enter the master password that you would like to use: ";
@@ -22,7 +22,7 @@ int main() {
 	}
 	const fs::path foldersPath{ "folders.txt" };
 	std::vector <std::string> folders;
-	if(!fs::exists(foldersPath)) {
+	if(!exists(foldersPath)) {
 		folders = { "Email", "Entertainment", "Games", "News/Reference", "Productivity Tools", "None" };
 		writeFoldersToFile(folders, foldersPath);
 	} else {
