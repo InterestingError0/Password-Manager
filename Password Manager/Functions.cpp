@@ -55,7 +55,7 @@ bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword) {
 	return passwordMeetsRequirements;
 }
 
-std::pair <std::string, std::string> hash(std::string& masterPassword, std::string salt) {
+std::pair <std::string, std::string> hash(std::string masterPassword, std::string salt) {
 	std::string encoded;
 	CryptoPP::Base64Encoder encoder;
 	CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::Pad(), false)(CryptoPP::Name::InsertLineBreaks(), false);

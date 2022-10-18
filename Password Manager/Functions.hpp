@@ -10,7 +10,7 @@ namespace fs = std::filesystem;
 
 void clearInputBuffer();
 bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword);
-std::pair <std::string, std::string> hash(std::string& masterPassword, std::string salt = "");
+std::pair <std::string, std::string> hash(std::string masterPassword, std::string salt = "");
 void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAndSalt, const fs::path& masterPasswordPath);
 int menuChoice(int lowerBound, int upperBound);
 bool checkIfEnteredMasterPasswordIsValid(std::string& tempMasterPassword, const fs::path& masterPasswordPath);
