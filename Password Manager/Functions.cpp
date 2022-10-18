@@ -69,7 +69,7 @@ std::pair <std::string, std::string> hash(std::string& masterPassword, std::stri
 	masterPassword += salt;
 	CryptoPP::Scrypt scrypt;
 	CryptoPP::SecByteBlock derived(32);
-	scrypt.DeriveKey(derived, derived.size(), (const CryptoPP::byte*)masterPassword.data(), masterPassword.size(), (const CryptoPP::byte*)salt.data(), salt.size(), 16384, 16, 16);
+	scrypt.DeriveKey(derived, derived.size(), reinterpret_cast <const CryptoPP::byte*> (masterPassword.data()), masterPassword.size(), reinterpret_cast <const CryptoPP::byte*> (salt.data()), salt.size(), 16384, 16, 16);
 	encoded = "";
 	CryptoPP::StringSource ss2(derived, 32, true, new CryptoPP::Redirector(encoder));
 	return std::make_pair(encoded, salt);
