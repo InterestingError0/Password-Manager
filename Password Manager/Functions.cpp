@@ -25,7 +25,7 @@ bool checkIfPasswordMeetsRequirements(const std::string& masterPassword) {
 	int numberCount{ 0 };
 	int uppercaseLetterCount{ 0 };
 	bool passwordMeetsRequirements{ true };
-	for(char c : masterPassword) {
+	for(const char c : masterPassword) {
 		if((c >= 33 && c <= 47) || (c >= 58 && c <= 64) || (c >= 91 && c <= 96) || (c >= 123 && c <= 126)) {
 			specialCharacterCount++;
 		} else if(c >= 48 && c <= 57) {
