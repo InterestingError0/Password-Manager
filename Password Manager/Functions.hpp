@@ -13,7 +13,7 @@ bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword);
 std::pair <std::string, std::string> hash(std::string masterPassword, std::string salt = "");
 void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAndSalt, const fs::path& masterPasswordPath);
 int menuChoice(int lowerBound, int upperBound);
-bool checkIfEnteredMasterPasswordIsValid(std::string& tempMasterPassword, const fs::path& masterPasswordPath);
+bool checkIfEnteredMasterPasswordIsValid(const std::string& tempMasterPassword, const fs::path& masterPasswordPath);
 std::string getFolderNameFromUser(const std::vector <std::string>& folders);
 void readFoldersIntoVector(std::vector <std::string>& folders, const fs::path& foldersPath);
 void readLoginsIntoVector(std::vector <std::array <std::string, 4>>& logins, const fs::path& loginsPath);

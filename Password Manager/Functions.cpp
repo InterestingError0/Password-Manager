@@ -91,7 +91,7 @@ int menuChoice(int lowerBound, int upperBound) {
 	return choice;
 }
 
-bool checkIfEnteredMasterPasswordIsValid(std::string& tempMasterPassword, const fs::path& masterPasswordPath) {
+bool checkIfEnteredMasterPasswordIsValid(const std::string& tempMasterPassword, const fs::path& masterPasswordPath) {
 	std::ifstream iMasterPassword(masterPasswordPath);
 	std::string masterPasswordHash;
 	std::getline(iMasterPassword, masterPasswordHash);
