@@ -18,7 +18,7 @@ namespace fs = std::filesystem;
 
 void clearInputBuffer() {
 	std::cin.clear();
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::cin.ignore(std::numeric_limits <std::streamsize>::max(), '\n');
 }
 
 bool checkIfPasswordMeetsRequirements(const std::string& masterPassword) {
@@ -70,7 +70,7 @@ std::pair <std::string, std::string> hash(std::string& masterPassword, std::stri
 	masterPassword += salt;
 	CryptoPP::Scrypt scrypt;
 	CryptoPP::SecByteBlock derived(32);
-	scrypt.DeriveKey(derived, derived.size(), reinterpret_cast <const CryptoPP::byte*> (masterPassword.data()), masterPassword.size(), reinterpret_cast <const CryptoPP::byte*> (salt.data()), salt.size(), 16384, 16, 16);
+	scrypt.DeriveKey(derived, derived.size(), reinterpret_cast <const CryptoPP::byte*>(masterPassword.data()), masterPassword.size(), reinterpret_cast <const CryptoPP::byte*>(salt.data()), salt.size(), 16384, 16, 16);
 	encoded = "";
 	CryptoPP::StringSource ss2(derived, 32, true, new CryptoPP::Redirector(encoder));
 	return std::make_pair(encoded, salt);
@@ -171,7 +171,7 @@ void writePasswordGeneratorHistoryToFile(const std::vector <std::string>& passwo
 	}
 }
 
-void writeSecureNotesToFile(const std::vector<std::array <std::string, 3>>& secureNotes, const fs::path& secureNotesPath) {
+void writeSecureNotesToFile(const std::vector <std::array <std::string, 3>>& secureNotes, const fs::path& secureNotesPath) {
 	std::ofstream oSecureNotes(secureNotesPath);
 	for(const auto& x : secureNotes) {
 		for(const std::string& y : x) {
@@ -190,7 +190,7 @@ bool deleteLoginIfLoginExists(std::vector <std::array <std::string, 4>>& logins,
 	return false;
 }
 
-void deletePasswordGeneratorHistory(std::vector<std::string>& passwordGeneratorHistory) {
+void deletePasswordGeneratorHistory(std::vector <std::string>& passwordGeneratorHistory) {
 	passwordGeneratorHistory.resize(0);
 }
 
@@ -293,6 +293,6 @@ char generateCharacter() {
 	CryptoPP::AutoSeededRandomPool prng;
 	CryptoPP::SecByteBlock gen(1);
 	prng.GenerateBlock(gen, gen.size());
-	const std::string character(reinterpret_cast<const char*>(gen.data()), gen.size());
+	const std::string character(reinterpret_cast <const char*>(gen.data()), gen.size());
 	return character[0];
 }
