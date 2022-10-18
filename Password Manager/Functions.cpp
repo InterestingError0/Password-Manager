@@ -205,9 +205,9 @@ bool deleteSecureNoteIfSecureNoteExists(std::vector <std::array <std::string, 3>
 }
 
 void deleteFolder(std::vector <std::string>& folders, const std::string& deleteFolderName) {
-	for(std::size_t i{ 0 }; i < folders.size(); i++) {
-		if(folders[i] == deleteFolderName) {
-			folders.erase(folders.begin() + i);
+	for(auto it{ folders.begin() }; it != folders.end(); ++it) {
+		if(*it == deleteFolderName) {
+			folders.erase(it);
 			break;
 		}
 	}
