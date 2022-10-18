@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <limits>
 #include <utility>
+#include <cstddef>
 
 namespace fs = std::filesystem;
 
@@ -204,7 +205,7 @@ bool deleteSecureNoteIfSecureNoteExists(std::vector <std::array <std::string, 3>
 }
 
 void deleteFolder(std::vector <std::string>& folders, const std::string& deleteFolderName) {
-	for(int i{ 0 }; i < folders.size(); i++) {
+	for(std::size_t i{ 0 }; i < folders.size(); i++) {
 		if(folders[i] == deleteFolderName) {
 			folders.erase(folders.begin() + i);
 			break;
@@ -213,7 +214,7 @@ void deleteFolder(std::vector <std::string>& folders, const std::string& deleteF
 }
 
 bool checkIfLoginIsDuplicate(const std::vector <std::array <std::string, 4>>& logins, const std::string& webAddress, const std::string& username) {
-	for(int i{ 0 }; i < logins.size(); i++) {
+	for(std::size_t i{ 0 }; i < logins.size(); i++) {
 		if(logins[i][1] == webAddress && logins[i][2] == username) {
 			return true;
 		}
@@ -222,7 +223,7 @@ bool checkIfLoginIsDuplicate(const std::vector <std::array <std::string, 4>>& lo
 }
 
 bool checkIfSecureNoteIsDuplicate(const std::vector <std::array <std::string, 3>>& secureNotes, const std::string& title) {
-	for(int i{ 0 }; i < secureNotes.size(); i++) {
+	for(std::size_t i{ 0 }; i < secureNotes.size(); i++) {
 		if(secureNotes[i][1] == title) {
 			return true;
 		}
@@ -239,14 +240,14 @@ bool checkIfFolderIsDuplicate(const std::vector <std::string>& folders, const st
 
 void printAllLogins(const std::vector <std::array <std::string, 4>>& logins) {
 	std::cout << "Here are the logins stored in your vault:\n\n";
-	for(int i{ 0 }; i < logins.size(); i++) {
+	for(std::size_t i{ 0 }; i < logins.size(); i++) {
 		std::cout << "Folder: " << logins[i][0] << "\nWeb Address: " << logins[i][1] << "\nUsername: " << logins[i][2] << "\nPassword: " << logins[i][3] << "\n\n";
 	}
 }
 
 bool printLoginsInFolder(const std::vector <std::array <std::string, 4>>& logins, const std::string& folder) {
 	bool noLoginsInFolder{ true };
-	for(int i{ 0 }; i < logins.size(); i++) {
+	for(std::size_t i{ 0 }; i < logins.size(); i++) {
 		if(logins[i][0] == folder) {
 			noLoginsInFolder = false;
 			std::cout << "\nWeb Address: " << logins[i][1] << "\nUsername: " << logins[i][2] << "\nPassword: " << logins[i][3] << "\n\n";
@@ -264,14 +265,14 @@ void printPasswordGeneratorHistory(const std::vector <std::string>& passwordGene
 
 void printAllSecureNotes(const std::vector <std::array <std::string, 3>>& secureNotes) {
 	std::cout << "Here are the secure notes stored in your vault:\n\n";
-	for(int i{ 0 }; i < secureNotes.size(); i++) {
+	for(std::size_t i{ 0 }; i < secureNotes.size(); i++) {
 		std::cout << "Folder: " << secureNotes[i][0] << "\nTitle: " << secureNotes[i][1] << "\nContent: " << secureNotes[i][2] << "\n\n";
 	}
 }
 
 bool printSecureNotesInFolder(const std::vector <std::array <std::string, 3>>& secureNotes, const std::string& folder) {
 	bool noSecureNotesInFolder{ true };
-	for(int i{ 0 }; i < secureNotes.size(); i++) {
+	for(std::size_t i{ 0 }; i < secureNotes.size(); i++) {
 		noSecureNotesInFolder = false;
 		if(secureNotes[i][0] == folder) {
 			std::cout << "Title: " << secureNotes[i][1] << "\nContent: " << secureNotes[i][2] << "\n\n";
