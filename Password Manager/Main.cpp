@@ -134,13 +134,7 @@ int main() {
 			} while(!(includeSymbols || includeNumbers || includeUppercaseLetters || includeLowercaseLetters) && (std::wcout << "Invalid Inputs!\n\n"));
 			std::string generatedPassword;
 			for(int x{ 0 }; x < lengthOfGeneratedPassword; x++) {
-				if(char character{ generateCharacter() }; includeSymbols && (character >= 33 && character <= 47 || character >= 58 && character <= 64 || character >= 91 && character <= 96 || character >= 123 && character <= 126)) {
-					generatedPassword += character;
-				} else if(includeNumbers && (character >= 48 && character <= 57)) {
-					generatedPassword += character;
-				} else if(includeUppercaseLetters && (character >= 65 && character <= 90)) {
-					generatedPassword += character;
-				} else if(includeLowercaseLetters && (character >= 97 && character <= 122)) {
+				if(char character{ generateCharacter() }; includeSymbols && (character >= 33 && character <= 47 || character >= 58 && character <= 64 || character >= 91 && character <= 96 || character >= 123 && character <= 126) && includeNumbers && (character >= 48 && character <= 57) && includeUppercaseLetters && (character >= 65 && character <= 90) && includeLowercaseLetters && (character >= 97 && character <= 122)) {
 					generatedPassword += character;
 				} else {
 					--x;
