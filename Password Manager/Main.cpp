@@ -34,7 +34,8 @@ int main() {
 		static int time{ 10 };
 		if(checkIfEnteredMasterPasswordIsValid(masterPassword, masterPasswordPath)) {
 			break;
-		} else if(!(numberOfAttemptedLogins % 5)) {
+		}
+		if(!(numberOfAttemptedLogins % 5)) {
 			std::cout << "You have entered an invalid master password too many times. You must wait " << time << " seconds before trying again.\n\n";
 			std::this_thread::sleep_for(std::chrono::seconds(time));
 			time *= 4;
