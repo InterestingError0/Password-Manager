@@ -6,6 +6,7 @@
 #include "base64.h"
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <array>
 #include <fstream>
@@ -21,7 +22,7 @@ void clearInputBuffer() {
 	std::cin.ignore(std::numeric_limits <std::streamsize>::max(), '\n');
 }
 
-bool checkIfPasswordMeetsRequirements(const std::string& masterPassword) {
+bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword) {
 	int specialCharacterCount{ 0 };
 	int numberCount{ 0 };
 	int uppercaseLetterCount{ 0 };
@@ -180,7 +181,7 @@ void writeSecureNotesToFile(const std::vector <std::array <std::string, 3>>& sec
 	}
 }
 
-bool deleteLoginIfLoginExists(std::vector <std::array <std::string, 4>>& logins, const std::string& webAddress, const std::string& username) {
+bool deleteLoginIfLoginExists(std::vector <std::array <std::string, 4>>& logins, const std::string_view webAddress, const std::string_view username) {
 	for(auto it{ logins.begin() }; it != logins.end(); ++it) {
 		if((*it)[1] == webAddress && (*it)[2] == username) {
 			logins.erase(it);
@@ -194,7 +195,7 @@ void deletePasswordGeneratorHistory(std::vector <std::string>& passwordGenerator
 	passwordGeneratorHistory.resize(0);
 }
 
-bool deleteSecureNoteIfSecureNoteExists(std::vector <std::array <std::string, 3>>& secureNotes, const std::string& title) {
+bool deleteSecureNoteIfSecureNoteExists(std::vector <std::array <std::string, 3>>& secureNotes, const std::string_view title) {
 	for(auto it{ secureNotes.begin() }; it != secureNotes.end(); ++it) {
 		if((*it)[1] == title) {
 			secureNotes.erase(it);
@@ -204,7 +205,7 @@ bool deleteSecureNoteIfSecureNoteExists(std::vector <std::array <std::string, 3>
 	return false;
 }
 
-void deleteFolder(std::vector <std::string>& folders, const std::string& deleteFolderName) {
+void deleteFolder(std::vector <std::string>& folders, const std::string_view deleteFolderName) {
 	for(auto it{ folders.begin() }; it != folders.end(); ++it) {
 		if(*it == deleteFolderName) {
 			folders.erase(it);
@@ -213,7 +214,7 @@ void deleteFolder(std::vector <std::string>& folders, const std::string& deleteF
 	}
 }
 
-bool checkIfLoginIsDuplicate(const std::vector <std::array <std::string, 4>>& logins, const std::string& webAddress, const std::string& username) {
+bool checkIfLoginIsDuplicate(const std::vector <std::array <std::string, 4>>& logins, const std::string_view webAddress, const std::string_view username) {
 	for(std::size_t i{ 0 }; i < logins.size(); i++) {
 		if(logins[i][1] == webAddress && logins[i][2] == username) {
 			return true;
@@ -222,7 +223,7 @@ bool checkIfLoginIsDuplicate(const std::vector <std::array <std::string, 4>>& lo
 	return false;
 }
 
-bool checkIfSecureNoteIsDuplicate(const std::vector <std::array <std::string, 3>>& secureNotes, const std::string& title) {
+bool checkIfSecureNoteIsDuplicate(const std::vector <std::array <std::string, 3>>& secureNotes, const std::string_view title) {
 	for(std::size_t i{ 0 }; i < secureNotes.size(); i++) {
 		if(secureNotes[i][1] == title) {
 			return true;
@@ -231,7 +232,7 @@ bool checkIfSecureNoteIsDuplicate(const std::vector <std::array <std::string, 3>
 	return false;
 }
 
-bool checkIfFolderIsDuplicate(const std::vector <std::string>& folders, const std::string& folder) {
+bool checkIfFolderIsDuplicate(const std::vector <std::string>& folders, const std::string_view folder) {
 	if(std::ranges::find(folders, folder) != folders.end()) {
 		return true;
 	}
@@ -245,7 +246,7 @@ void printAllLogins(const std::vector <std::array <std::string, 4>>& logins) {
 	}
 }
 
-bool printLoginsInFolder(const std::vector <std::array <std::string, 4>>& logins, const std::string& folder) {
+bool printLoginsInFolder(const std::vector <std::array <std::string, 4>>& logins, const std::string_view folder) {
 	bool noLoginsInFolder{ true };
 	for(std::size_t i{ 0 }; i < logins.size(); i++) {
 		if(logins[i][0] == folder) {
