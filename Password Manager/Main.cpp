@@ -136,7 +136,7 @@ int main() {
 			std::string generatedPassword;
 			for(int x{ 0 }; x < lengthOfGeneratedPassword; x++) {
 				if(char character{ generateCharacter() }; includeSymbols && (character >= 33 && character <= 47 || character >= 58 && character <= 64 || character >= 91 && character <= 96 || character >= 123 && character <=
-					126) && includeNumbers && (character >= 48 && character <= 57) && includeUppercaseLetters && (character >= 65 && character <= 90) && includeLowercaseLetters && (character >= 97 && character <= 122)) {
+					126) || includeNumbers && (character >= 48 && character <= 57) || includeUppercaseLetters && (character >= 65 && character <= 90) || includeLowercaseLetters && (character >= 97 && character <= 122)) {
 					generatedPassword += character;
 				} else {
 					--x;
