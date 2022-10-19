@@ -41,15 +41,15 @@ bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword) {
 		passwordMeetsRequirements = false;
 	}
 	if(!specialCharacterCount) {
-		std::cout << "Your master password must contain a special character (e.g., !, @, #, $, etc.).\n";
+		std::cout << "Your master password must contain at least one special character (e.g., !, @, #, $, etc.).\n";
 		passwordMeetsRequirements = false;
 	}
 	if(!numberCount) {
-		std::cout << "Your master password must contain a number (e.g., 1, 2, 3, 4, etc.).\n";
+		std::cout << "Your master password must contain at least one number (e.g., 1, 2, 3, 4, etc.).\n";
 		passwordMeetsRequirements = false;
 	}
 	if(!uppercaseLetterCount) {
-		std::cout << "Your master password must contain an uppercase letter (e.g., A, B, C, D, etc.).\n";
+		std::cout << "Your master password must contain at least one uppercase letter (e.g., A, B, C, D, etc.).\n";
 		passwordMeetsRequirements = false;
 	}
 	return passwordMeetsRequirements;
