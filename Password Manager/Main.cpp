@@ -182,7 +182,6 @@ int main() {
 			}
 			break;
 			case 2:
-			{
 				if(!secureNotes.empty()) {
 					bool secureNoteExists{ false };
 					do {
@@ -200,7 +199,6 @@ int main() {
 				} else {
 					std::cout << "No secure notes have been stored in your vault!\n\n";
 				}
-			}
 			break;
 			}
 		}
