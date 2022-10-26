@@ -3,7 +3,6 @@
 #include "scrypt.h"
 #include "secblock.h"
 #include "osrng.h"
-#include "base64.h"
 #include <iostream>
 #include <string>
 #include <string_view>
@@ -56,29 +55,23 @@ bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword) {
 }
 
 std::pair <std::string, std::string> hash(std::string masterPassword, std::string salt) {
-	std::string encoded;
-	CryptoPP::Base64Encoder encoder;
-	CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::Pad(), false)(CryptoPP::Name::InsertLineBreaks(), false);
-	encoder.IsolatedInitialize(params);
-	encoder.Attach(new CryptoPP::StringSink(encoded));
 	if(salt.empty()) {
 		CryptoPP::AutoSeededRandomPool rng;
 		CryptoPP::byte gSalt[32];
 		rng.GenerateBlock(gSalt, 32);
-		CryptoPP::StringSource ss1(gSalt, 32, true, new CryptoPP::Redirector(encoder));
-		salt = encoded;
+		CryptoPP::StringSource ss1(gSalt, 32, true, new CryptoPP::StringSink(salt));
 	}
 	masterPassword += salt;
 	CryptoPP::Scrypt scrypt;
 	CryptoPP::SecByteBlock derived(32);
 	scrypt.DeriveKey(derived, derived.size(), reinterpret_cast <const CryptoPP::byte*>(masterPassword.data()), masterPassword.size(), reinterpret_cast <const CryptoPP::byte*>(salt.data()), salt.size(), 16384, 16, 16);
-	encoded.clear();
-	CryptoPP::StringSource ss2(derived, 32, true, new CryptoPP::Redirector(encoder));
-	return std::make_pair(encoded, salt);
+	std::string hash;
+	CryptoPP::StringSource ss2(derived, 32, true, new CryptoPP::StringSink(hash));
+	return std::make_pair(hash, salt);
 }
 
 void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAndSalt, const fs::path& masterPasswordPath) {
-	std::ofstream oMasterPassword(masterPasswordPath);
+	std::ofstream oMasterPassword(masterPasswordPath, std::ios::binary);
 	oMasterPassword << hashAndSalt.first << '\n' << hashAndSalt.second;
 }
 
@@ -92,7 +85,7 @@ int menuChoice(int lowerBound, int upperBound) {
 }
 
 bool checkIfEnteredMasterPasswordIsValid(const std::string& tempMasterPassword, const fs::path& masterPasswordPath) {
-	std::ifstream iMasterPassword(masterPasswordPath);
+	std::ifstream iMasterPassword(masterPasswordPath, std::ios::binary);
 	std::string masterPasswordHash;
 	std::getline(iMasterPassword, masterPasswordHash);
 	std::string salt;
