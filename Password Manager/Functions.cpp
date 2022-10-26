@@ -75,7 +75,7 @@ void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAn
 	oMasterPassword << hashAndSalt.first << '\n' << hashAndSalt.second;
 }
 
-int menuChoice(int lowerBound, int upperBound) {
+int menuChoice(const int lowerBound, const int upperBound) {
 	int choice{ 0 };
 	while((std::cout << "Enter your choice: ") && !(std::cin >> choice) || (choice < lowerBound || choice > upperBound)) {
 		std::cout << "Invalid Input!\n\n";
