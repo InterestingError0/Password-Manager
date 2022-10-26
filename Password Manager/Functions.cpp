@@ -61,7 +61,6 @@ std::pair <std::string, std::string> hash(std::string masterPassword, std::strin
 		rng.GenerateBlock(gSalt, 32);
 		CryptoPP::StringSource ss1(gSalt, 32, true, new CryptoPP::StringSink(salt));
 	}
-	masterPassword += salt;
 	CryptoPP::Scrypt scrypt;
 	CryptoPP::SecByteBlock derived(32);
 	scrypt.DeriveKey(derived, derived.size(), reinterpret_cast <const CryptoPP::byte*>(masterPassword.data()), masterPassword.size(), reinterpret_cast <const CryptoPP::byte*>(salt.data()), salt.size(), 16384, 16, 16);
