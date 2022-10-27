@@ -263,7 +263,7 @@ void printAllSecureNotes(const std::vector <std::array <std::string, 3>>& secure
 	}
 }
 
-bool printSecureNotesInFolder(const std::vector <std::array <std::string, 3>>& secureNotes, const std::string& folder) {
+bool printSecureNotesInFolder(const std::vector <std::array <std::string, 3>>& secureNotes, const std::string_view folder) {
 	bool noSecureNotesInFolder{ true };
 	for(std::size_t i{ 0 }; i < secureNotes.size(); i++) {
 		noSecureNotesInFolder = false;

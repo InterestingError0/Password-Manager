@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <filesystem>
+#include <secblock.h>
 #include <utility>
 
 namespace fs = std::filesystem;
@@ -31,7 +32,7 @@ bool checkIfLoginIsDuplicate(const std::vector <std::array <std::string, 4>>& lo
 bool checkIfSecureNoteIsDuplicate(const std::vector <std::array <std::string, 3>>& secureNotes, const std::string_view title);
 bool checkIfFolderIsDuplicate(const std::vector <std::string>& folders, const std::string_view folder);
 void printAllLogins(const std::vector <std::array <std::string, 4>>& logins);
-bool printLoginsInFolder(const std::vector <std::array <std::string, 4>>& logins, const std::string& folder);
+bool printLoginsInFolder(const std::vector <std::array <std::string, 4>>& logins, const std::string_view folder);
 void printPasswordGeneratorHistory(const std::vector <std::string>& passwordGeneratorHistory);
 void printAllSecureNotes(const std::vector <std::array <std::string, 3>>& secureNotes);
 bool printSecureNotesInFolder(const std::vector <std::array <std::string, 3>>& secureNotes, const std::string_view folder);
