@@ -83,8 +83,7 @@ int main() {
 			break;
 			case 2:
 				if(!logins.empty()) {
-					bool loginExists{ false };
-					do {
+					while(true) {
 						std::cout << "Enter the web address followed by the username: ";
 						std::string inputWebAddress;
 						std::string inputUsername;
@@ -92,11 +91,10 @@ int main() {
 						if(deleteLoginIfLoginExists(logins, inputWebAddress, inputUsername)) {
 							std::cout << "Login successfully deleted!\n\n";
 							writeLoginsToFile(logins, loginsPath);
-							loginExists = true;
-						} else {
-							std::cout << "Login doesn't exist!\n\n";
+							break;
 						}
-					} while(!loginExists);
+						std::cout << "Login doesn't exist!\n\n";
+					}
 				} else {
 					std::cout << "No logins have been stored in your vault!\n\n";
 				}
@@ -183,19 +181,17 @@ int main() {
 			break;
 			case 2:
 				if(!secureNotes.empty()) {
-					bool secureNoteExists{ false };
-					do {
+					while(true) {
 						std::cout << "Enter the title of the secure note you want to delete: ";
 						std::string inputTitle;
 						std::getline(std::cin >> std::ws, inputTitle);
 						if(deleteSecureNoteIfSecureNoteExists(secureNotes, inputTitle)) {
 							std::cout << "Secure note successfully deleted!\n\n";
 							writeSecureNotesToFile(secureNotes, secureNotesPath);
-							secureNoteExists = true;
-						} else {
-							std::cout << "Secure Note Doesn't Exist!\n\n";
+							break;
 						}
-					} while(!secureNoteExists);
+						std::cout << "Secure Note Doesn't Exist!\n\n";
+					}
 				} else {
 					std::cout << "No secure notes have been stored in your vault!\n\n";
 				}
