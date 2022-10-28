@@ -83,16 +83,14 @@ int main() {
 			break;
 			case 2:
 				if(!logins.empty()) {
-					while(true) {
-						std::cout << "Enter the web address followed by the username: ";
-						std::string inputWebAddress;
-						std::string inputUsername;
-						std::cin >> inputWebAddress >> inputUsername;
-						if(deleteLoginIfLoginExists(logins, inputWebAddress, inputUsername)) {
-							std::cout << "Login successfully deleted!\n\n";
-							writeLoginsToFile(logins, loginsPath);
-							break;
-						}
+					std::cout << "Enter the web address followed by the username: ";
+					std::string inputWebAddress;
+					std::string inputUsername;
+					std::cin >> inputWebAddress >> inputUsername;
+					if(deleteLoginIfLoginExists(logins, inputWebAddress, inputUsername)) {
+						std::cout << "Login successfully deleted!\n\n";
+						writeLoginsToFile(logins, loginsPath);
+					} else {
 						std::cout << "Login doesn't exist!\n\n";
 					}
 				} else {
@@ -181,15 +179,13 @@ int main() {
 			break;
 			case 2:
 				if(!secureNotes.empty()) {
-					while(true) {
-						std::cout << "Enter the title of the secure note you want to delete: ";
-						std::string inputTitle;
-						std::getline(std::cin >> std::ws, inputTitle);
-						if(deleteSecureNoteIfSecureNoteExists(secureNotes, inputTitle)) {
-							std::cout << "Secure note successfully deleted!\n\n";
-							writeSecureNotesToFile(secureNotes, secureNotesPath);
-							break;
-						}
+					std::cout << "Enter the title of the secure note you want to delete: ";
+					std::string inputTitle;
+					std::getline(std::cin >> std::ws, inputTitle);
+					if(deleteSecureNoteIfSecureNoteExists(secureNotes, inputTitle)) {
+						std::cout << "Secure note successfully deleted!\n\n";
+						writeSecureNotesToFile(secureNotes, secureNotesPath);
+					} else {
 						std::cout << "Secure Note Doesn't Exist!\n\n";
 					}
 				} else {
