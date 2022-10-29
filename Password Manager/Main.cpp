@@ -212,9 +212,12 @@ int main() {
 			case 2:
 				std::string inputFolderName{ getFolderNameFromUser(folders) };
 				if(inputFolderName != "None") {
-					deleteFolder(folders, inputFolderName);
-					std::cout << "Folder successfully deleted!\n\n";
-					writeFoldersToFile(folders, foldersPath);
+					if(deleteFolderIfFolderExists(folders, inputFolderName)) {
+						std::cout << "Folder successfully deleted!\n\n";
+						writeFoldersToFile(folders, foldersPath);
+					} else {
+						std::cout << "Login doesn't exist!\n\n";
+					}
 				} else {
 					std::cout << "ERROR: Cannot delete that folder! Access Denied!\n\n";
 				}

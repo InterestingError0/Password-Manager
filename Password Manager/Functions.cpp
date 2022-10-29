@@ -197,13 +197,14 @@ bool deleteSecureNoteIfSecureNoteExists(std::vector <std::array <std::string, 3>
 	return false;
 }
 
-void deleteFolder(std::vector <std::string>& folders, const std::string_view deleteFolderName) {
+bool deleteFolderIfFolderExists(std::vector <std::string>& folders, const std::string_view deleteFolderName) {
 	for(auto it{ folders.begin() }; it != folders.end(); ++it) {
 		if(*it == deleteFolderName) {
 			folders.erase(it);
-			break;
+			return true;
 		}
 	}
+	return false;
 }
 
 bool checkIfLoginIsDuplicate(const std::vector <std::array <std::string, 4>>& logins, const std::string_view webAddress, const std::string_view username) {
