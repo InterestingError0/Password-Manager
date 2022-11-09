@@ -4,7 +4,6 @@
 #include <vector>
 #include <array>
 #include <filesystem>
-#include <secblock.h>
 #include <utility>
 
 namespace fs = std::filesystem;
