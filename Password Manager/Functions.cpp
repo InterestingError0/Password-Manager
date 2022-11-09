@@ -13,12 +13,34 @@
 #include <limits>
 #include <utility>
 #include <cstddef>
+#include <conio.h>
 
 namespace fs = std::filesystem;
 
 void clearInputBuffer() {
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits <std::streamsize>::max(), '\n');
+}
+
+std::string getMasterPasswordFromUser() {
+	std::string masterPassword;
+	while(true) {
+		const char inputChar{ static_cast<char>(_getch()) };
+		if(inputChar == 13) {
+			std::cout << '\n';
+			return masterPassword;
+		}
+		if(inputChar == 8 && !masterPassword.empty()) {
+			masterPassword.pop_back();
+			std::cout << "\b \b";
+			continue;
+		}
+		if(inputChar == 8 && masterPassword.empty()) {
+			continue;
+		}
+		masterPassword.push_back(inputChar);
+		std::cout << '*';
+	}
 }
 
 bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword) {

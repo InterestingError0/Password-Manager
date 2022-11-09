@@ -15,7 +15,7 @@ int main() {
 		std::string masterPassword;
 		do {
 			std::cout << "Enter the master password that you would like to use: ";
-			std::cin >> masterPassword;
+			masterPassword = getMasterPasswordFromUser();
 			std::cout << '\n';
 		} while(!checkIfPasswordMeetsRequirements(masterPassword));
 		saveMasterPasswordToFile(hash(masterPassword), masterPasswordPath);
@@ -29,7 +29,8 @@ int main() {
 		readFoldersIntoVector(folders, foldersPath);
 	}
 	std::string masterPassword;
-	while((std::cout << "Enter your master password: ") && (std::cin >> masterPassword)) {
+	while(std::cout << "Enter your master password: ") {
+		masterPassword = getMasterPasswordFromUser();
 		static int numberOfAttemptedLogins{ 1 };
 		static int time{ 10 };
 		if(checkIfEnteredMasterPasswordIsValid(masterPassword, masterPasswordPath)) {

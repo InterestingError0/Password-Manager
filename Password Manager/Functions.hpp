@@ -9,6 +9,7 @@
 namespace fs = std::filesystem;
 
 void clearInputBuffer();
+std::string getMasterPasswordFromUser();
 bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword);
 std::pair <std::string, std::string> hash(std::string masterPassword, std::string salt = "");
 void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAndSalt, const fs::path& masterPasswordPath);
