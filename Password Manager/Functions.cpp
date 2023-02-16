@@ -1,4 +1,4 @@
-#include "Functions.hpp"
+#include "functions.hpp"
 #include "cryptlib.h"
 #include "scrypt.h"
 #include "secblock.h"
