@@ -1,4 +1,10 @@
-#include "functions.hpp"
+#include "miscellaneousFunctions.hpp"
+#include "cryptographyFunctions.hpp"
+#include "readFromFileFunctions.hpp"
+#include "writeToFileFunctions.hpp"
+#include "deleteFunctions.hpp"
+#include "checkIfDuplicateFunctions.hpp"
+#include "printFunctions.hpp"
 #include <iostream>
 #include <string>
 #include <array>
