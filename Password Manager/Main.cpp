@@ -226,7 +226,7 @@ int main() {
 						std::cout << "Login doesn't exist!\n\n";
 					}
 				} else {
-					std::cout << "ERROR: Cannot delete that folder! Access Denied!\n\n";
+					std::cout << "ERROR: That folder cannot be deleted.\n\n";
 				}
 				break;
 			}
