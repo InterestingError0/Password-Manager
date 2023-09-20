@@ -34,9 +34,8 @@ int main() {
 	} else {
 		readFoldersIntoVector(folders, foldersPath);
 	}
-	std::string masterPassword;
 	while(std::cout << "Enter your master password: ") {
-		masterPassword = getMasterPasswordFromUser();
+		std::string masterPassword = getMasterPasswordFromUser();
 		static int numberOfAttemptedLogins{ 1 };
 		static int time{ 10 };
 		if(checkIfEnteredMasterPasswordIsValid(masterPassword, masterPasswordPath)) {
