@@ -68,13 +68,11 @@ int main() {
 		std::cout << "\n\t1. Logins\n\t2. Password Generator\n\t3. Password Generator History\n\t4. Secure Notes\n\t5. Folders\n\t6. Exit\n\n";
 		mainMenuChoice = menuChoice(1, 6);
 		switch(mainMenuChoice) {
-		case 1:
-		{
+		case 1: {
 			printAllLogins(logins);
 			std::cout << "\t1. Store Logins\n\t2. Delete Logins\n\t3. Back to the Main Menu\n\n";
 			switch(menuChoice(1, 3)) {
-			case 1:
-			{
+			case 1: {
 				printFolders(folders);
 				std::array <std::string, 4> login{ getFolderNameFromUser(folders) };
 				std::cout << "Enter the web address followed by the username followed by the password: ";
@@ -106,8 +104,7 @@ int main() {
 			}
 		}
 		break;
-		case 2:
-		{
+		case 2: {
 			int lengthOfGeneratedPassword{ 0 };
 			while((std::cout << "Enter the length of the generated password: ") && !(std::cin >> lengthOfGeneratedPassword) || lengthOfGeneratedPassword <= 0) {
 				std::cout << "Invalid Input!\n\n";
@@ -162,13 +159,11 @@ int main() {
 				std::cout << "No passwords have been generated!\n\n";
 			}
 			break;
-		case 4:
-		{
+		case 4: {
 			printAllSecureNotes(secureNotes);
 			std::cout << "\t1. Store Secure Notes\n\t2. Delete Secure Notes\n\t3. Back to the Main Menu\n\n";
 			switch(menuChoice(1, 3)) {
-			case 1:
-			{
+			case 1: {
 				printFolders(folders);
 				std::array <std::string, 3> secureNote{ getFolderNameFromUser(folders) };
 				std::cout << "Enter the title: ";
@@ -197,7 +192,7 @@ int main() {
 				} else {
 					std::cout << "No secure notes have been stored in your vault!\n\n";
 				}
-			break;
+				break;
 			}
 		}
 		break;
@@ -205,8 +200,7 @@ int main() {
 			printFolders(folders);
 			std::cout << "\t1. Add Folders\n\t2. Delete Folders\n\t3. Back to the Main Menu\n\n";
 			switch(menuChoice(1, 3)) {
-			case 1:
-			{
+			case 1: {
 				if(checkIfFolderIsDuplicate(folders, getFolderNameFromUser(folders))) {
 					std::cout << "Folder already exists!\n\n";
 				} else {
