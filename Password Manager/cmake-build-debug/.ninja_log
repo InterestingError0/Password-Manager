@@ -1,0 +1,23 @@
+# ninja log v5
+1	1255	1703542829835773114	CMakeFiles/Password_Manager.dir/miscellaneousFunctions.cpp.o	327912aff50e47e6
+1	1958	1703545319031171108	CMakeFiles/Password_Manager.dir/Main.cpp.o	fcea836c1295f9ca
+1	796	1703545317871177474	CMakeFiles/Password_Manager.dir/checkIfDuplicateFunctions.cpp.o	48665e414da201a4
+1528	1983	1703545249358220102	Password_Manager	5e881e3eae45040a
+2	933	1703545318007843390	CMakeFiles/Password_Manager.dir/deleteFunctions.cpp.o	c29c3dff0648ab23
+2	1297	1703545318371174730	CMakeFiles/Password_Manager.dir/readFromFileFunctions.cpp.o	6b2a122125d5dc66
+2	860	1703545317934510460	CMakeFiles/Password_Manager.dir/printFunctions.cpp.o	6337bc3da83ce424
+2	1197	1703545318274508594	CMakeFiles/Password_Manager.dir/writeToFileFunctions.cpp.o	57acde263dcf22
+1	1796	1703538329098393597	CMakeFiles/Password_Manager.dir/cryptographyFunctions.cpp.o	28d68c14669dc70f
+1	951	1703545341214382712	CMakeFiles/Password_Manager.dir/checkIfDuplicateFunctions.cpp.o	bd713b0e3ffefb0
+2	1120	1703545341384381780	CMakeFiles/Password_Manager.dir/deleteFunctions.cpp.o	cb70515f535d2636
+2	1283	1703545341547714217	CMakeFiles/Password_Manager.dir/printFunctions.cpp.o	7bea4813d27b1f5a
+3	1497	1703545341761046379	CMakeFiles/Password_Manager.dir/writeToFileFunctions.cpp.o	20e32c567c0be18a
+2	1822	1703545342087711253	CMakeFiles/Password_Manager.dir/readFromFileFunctions.cpp.o	4fb1e6201f0f9a9e
+1	1991	1703545342257710321	CMakeFiles/Password_Manager.dir/cryptographyFunctions.cpp.o	4aebdf78694f10c4
+2	2211	1703545342477709113	CMakeFiles/Password_Manager.dir/miscellaneousFunctions.cpp.o	8d615054ccee9a4
+1	2410	1703545342674374701	CMakeFiles/Password_Manager.dir/Main.cpp.o	67e4360d8389a156
+2411	2782	1703545343041039355	Password_Manager	57e60d03cb572884
+1	1177	1703545387787460479	CMakeFiles/Password_Manager.dir/miscellaneousFunctions.cpp.o	8d615054ccee9a4
+1177	1550	1703545388154125133	Password_Manager	57e60d03cb572884
+1	1231	1703545591493009322	CMakeFiles/Password_Manager.dir/miscellaneousFunctions.cpp.o	8d615054ccee9a4
+1231	1648	1703545591903007072	Password_Manager	57e60d03cb572884

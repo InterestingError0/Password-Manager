@@ -1,0 +1,10 @@
+# ninja log v5
+1	1444	1703452291402065980	CMakeFiles/Password_Manager.dir/miscellaneousFunctions.cpp.o	cc924a84d3917b3d
+0	1868	1703452291825396990	CMakeFiles/Password_Manager.dir/Main.cpp.o	a42a580d91bc36c0
+0	462	1703452290418738043	CMakeFiles/Password_Manager.dir/checkIfDuplicateFunctions.cpp.o	f05e19d6ccd010a6
+1868	2033	1703452291985396113	Password_Manager	caf530b660fb42aa
+1	742	1703452290698736506	CMakeFiles/Password_Manager.dir/deleteFunctions.cpp.o	f1a80c01b6c8e6f8
+1	1152	1703452291108734256	CMakeFiles/Password_Manager.dir/readFromFileFunctions.cpp.o	8bd94c5af1675893
+1	601	1703452290558737275	CMakeFiles/Password_Manager.dir/printFunctions.cpp.o	11fc858e2cc1c418
+2	850	1703452290808735903	CMakeFiles/Password_Manager.dir/writeToFileFunctions.cpp.o	fb9bd367de4d78f2
+1	1496	1703452291452065706	CMakeFiles/Password_Manager.dir/cryptographyFunctions.cpp.o	8f8bab952531d26e

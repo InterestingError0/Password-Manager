@@ -1,8 +1,8 @@
 #include "miscellaneousFunctions.hpp"
 #include "cryptographyFunctions.hpp"
-#include "cryptlib.h"
-#include "secblock.h"
-#include "osrng.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/osrng.h"
 #include <iostream>
 #include <string>
 #include <string_view>
@@ -10,7 +10,7 @@
 #include <filesystem>
 #include <limits>
 #include <utility>
-#include <conio.h>
+#include "ncurses.h"
 
 namespace fs = std::filesystem;
 
@@ -20,24 +20,25 @@ void clearInputBuffer() {
 }
 
 std::string getMasterPasswordFromUser() {
+	noecho();
+	cbreak();
 	std::string masterPassword;
-	while(true) {
-		const char inputChar{ static_cast <char>(_getch()) };
-		if(inputChar == 13) {
-			std::cout << '\n';
-			return masterPassword;
-		}
-		if(inputChar == 8 && !masterPassword.empty()) {
+	char inputChar;
+	while((inputChar = static_cast <char>(getch())) != '\n') {
+		if((inputChar == 127 || inputChar == 8) && !masterPassword.empty()) {
 			masterPassword.pop_back();
-			std::cout << "\b \b";
+			printw("\b \b");
 			continue;
 		}
-		if(inputChar == 8 && masterPassword.empty()) {
+		if((inputChar == 127 || inputChar == 8) && masterPassword.empty()) {
 			continue;
 		}
 		masterPassword.push_back(inputChar);
-		std::cout << '*';
+		printw("*");
 	}
+	printw("\n");
+	nocbreak();
+	return masterPassword;
 }
 
 bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword) {
@@ -54,20 +55,21 @@ bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword) {
 			uppercaseLetterCount++;
 		}
 	}
-	if(masterPassword.length() < 16) {
-		std::cout << "Your master password is too short. The length of the master password must be greater than 16.\n";
+
+	if(masterPassword.length() < 8) {
+		printw("Your master password is too short. The length of the master password must be greater than 8.\n");
 		passwordMeetsRequirements = false;
 	}
 	if(!specialCharacterCount) {
-		std::cout << "Your master password must contain at least one special character (e.g., !, @, #, $, etc.).\n";
+		printw("Your master password must contain at least one special character (e.g., !, @, #, $, etc.).\n");
 		passwordMeetsRequirements = false;
 	}
 	if(!numberCount) {
-		std::cout << "Your master password must contain at least one number (e.g., 1, 2, 3, 4, etc.).\n";
+		printw("Your master password must contain at least one number (e.g., 1, 2, 3, 4, etc.).\n");
 		passwordMeetsRequirements = false;
 	}
 	if(!uppercaseLetterCount) {
-		std::cout << "Your master password must contain at least one uppercase letter (e.g., A, B, C, D, etc.).\n";
+		printw("Your master password must contain at least one uppercase letter (e.g., A, B, C, D, etc.).\n");
 		passwordMeetsRequirements = false;
 	}
 	return passwordMeetsRequirements;

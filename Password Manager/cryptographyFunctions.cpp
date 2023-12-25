@@ -1,8 +1,8 @@
 #include "cryptographyFunctions.hpp"
-#include "cryptlib.h"
-#include "scrypt.h"
-#include "secblock.h"
-#include "osrng.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/scrypt.h"
+#include "cryptopp/secblock.h"
+#include "cryptopp/osrng.h"
 #include <string>
 #include <utility>
 

@@ -12,17 +12,20 @@
 #include <filesystem>
 #include <thread>
 #include <chrono>
+#include "ncurses.h"
 
 namespace fs = std::filesystem;
 
 int main() {
+	initscr();
 	const fs::path masterPasswordPath{ "masterPassword.txt" };
 	if(!exists(masterPasswordPath)) {
 		std::string masterPassword;
 		do {
-			std::cout << "Enter the master password that you would like to use: ";
+			printw("Enter the master password that you would like to use: ");
+			refresh();
 			masterPassword = getMasterPasswordFromUser();
-			std::cout << '\n';
+			printw("\n");
 		} while(!checkIfPasswordMeetsRequirements(masterPassword));
 		saveMasterPasswordToFile(hash(masterPassword), masterPasswordPath);
 	}
@@ -34,23 +37,28 @@ int main() {
 	} else {
 		readFoldersIntoVector(folders, foldersPath);
 	}
-	while(std::cout << "Enter your master password: ") {
+	while(true) {
+		printw("Enter your master password: ");
 		std::string masterPassword = getMasterPasswordFromUser();
+		printw("\n");
 		static int numberOfAttemptedLogins{ 1 };
 		static int time{ 10 };
 		if(checkIfEnteredMasterPasswordIsValid(masterPassword, masterPasswordPath)) {
 			break;
 		}
 		if(!(numberOfAttemptedLogins % 5)) {
-			std::cout << "You have entered an invalid master password too many times. You must wait " << time << " seconds before trying again.\n\n";
+			printw("You have entered an invalid master password too many times. You must wait seconds before trying again.\n\n");
 			std::this_thread::sleep_for(std::chrono::seconds(time));
 			time *= 4;
 			numberOfAttemptedLogins++;
 		} else {
-			std::cout << "Invalid Master Password!\n\n";
+			printw("Invalid Master Password!\n\n");
 			numberOfAttemptedLogins++;
 		}
 	}
+	refresh();
+	endwin();
+
 	const fs::path loginsPath{ "logins.txt" };
 	std::vector <std::array <std::string, 4>> logins;
 	readLoginsIntoVector(logins, loginsPath);

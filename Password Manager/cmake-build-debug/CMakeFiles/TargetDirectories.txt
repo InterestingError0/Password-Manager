@@ -1,0 +1,3 @@
+/home/interestingerror0/Code Files/C++/Password Manager/cmake-build-debug/CMakeFiles/Password_Manager.dir
+/home/interestingerror0/Code Files/C++/Password Manager/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/interestingerror0/Code Files/C++/Password Manager/cmake-build-debug/CMakeFiles/rebuild_cache.dir
