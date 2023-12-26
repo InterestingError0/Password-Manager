@@ -47,14 +47,14 @@ int main() {
 			break;
 		}
 		if(!(numberOfAttemptedLogins % 5)) {
-			printw("You have entered an invalid master password too many times. You must wait seconds before trying again.\n\n");
+			printw("You have entered an invalid master password too many times. You must wait %d seconds before trying again.\n\n", time);
+			refresh();
 			std::this_thread::sleep_for(std::chrono::seconds(time));
 			time *= 4;
-			numberOfAttemptedLogins++;
 		} else {
 			printw("Invalid Master Password!\n\n");
-			numberOfAttemptedLogins++;
 		}
+		numberOfAttemptedLogins++;
 	}
 	refresh();
 	endwin();
@@ -114,7 +114,7 @@ int main() {
 		break;
 		case 2: {
 			int lengthOfGeneratedPassword{ 0 };
-			while((std::cout << "Enter the length of the generated password: ") && !(std::cin >> lengthOfGeneratedPassword) || lengthOfGeneratedPassword <= 0) {
+			while((std::cout << "Enter the length of the generated password: " && !(std::cin >> lengthOfGeneratedPassword)) || lengthOfGeneratedPassword <= 0) {
 				std::cout << "Invalid Input!\n\n";
 				clearInputBuffer();
 			}
@@ -123,27 +123,27 @@ int main() {
 			int includeUppercaseLetters{ 0 };
 			int includeLowercaseLetters{ 0 };
 			do {
-				while((std::cout << "Enter '1' to include symbols, '0' to exclude symbols: ") && !(std::cin >> includeSymbols) || (includeSymbols != 1 && includeSymbols != 0)) {
+				while((std::cout << "Enter '1' to include symbols, '0' to exclude symbols: " && !(std::cin >> includeSymbols)) || (includeSymbols != 1 && includeSymbols != 0)) {
 					std::cout << "Invalid Input!\n\n";
 					clearInputBuffer();
 				}
-				while((std::cout << "Enter '1' to include numbers, '0' to exclude numbers: ") && !(std::cin >> includeNumbers) || (includeNumbers != 1 && includeNumbers != 0)) {
+				while((std::cout << "Enter '1' to include numbers, '0' to exclude numbers: " && !(std::cin >> includeNumbers)) || (includeNumbers != 1 && includeNumbers != 0)) {
 					std::cout << "Invalid Input!\n\n";
 					clearInputBuffer();
 				}
-				while((std::cout << "Enter '1' to include uppercase letters, '0' to exclude uppercase letters: ") && !(std::cin >> includeUppercaseLetters) || (includeUppercaseLetters != 1 && includeUppercaseLetters != 0)) {
+				while((std::cout << "Enter '1' to include uppercase letters, '0' to exclude uppercase letters: " && !(std::cin >> includeUppercaseLetters)) || (includeUppercaseLetters != 1 && includeUppercaseLetters != 0)) {
 					std::cout << "Invalid Input!\n\n";
 					clearInputBuffer();
 				}
-				while((std::cout << "Enter '1' to include lowercase letters, '0' to exclude lowercase letters: ") && !(std::cin >> includeLowercaseLetters) || (includeLowercaseLetters != 1 && includeLowercaseLetters != 0)) {
+				while((std::cout << "Enter '1' to include lowercase letters, '0' to exclude lowercase letters: " && !(std::cin >> includeLowercaseLetters)) || (includeLowercaseLetters != 1 && includeLowercaseLetters != 0)) {
 					std::cout << "Invalid Input!\n\n";
 					clearInputBuffer();
 				}
 			} while(!(includeSymbols || includeNumbers || includeUppercaseLetters || includeLowercaseLetters) && (std::cout << "Invalid Inputs!\n\n"));
 			std::string generatedPassword;
 			for(int x{ 0 }; x < lengthOfGeneratedPassword; x++) {
-				if(char character{ generateCharacter() }; includeSymbols && (character >= 33 && character <= 47 || character >= 58 && character <= 64 || character >= 91 && character <= 96 || character >= 123 && character <=
-					126) || includeNumbers && (character >= 48 && character <= 57) || includeUppercaseLetters && (character >= 65 && character <= 90) || includeLowercaseLetters && (character >= 97 && character <= 122)) {
+				if(char character{ generateCharacter() }; (includeSymbols && ((character >= 33 && character <= 47) || (character >= 58 && character <= 64) || (character >= 91 && character <= 96) || (character >= 123 && character <=
+					126))) || (includeNumbers && (character >= 48 && character <= 57)) || (includeUppercaseLetters && (character >= 65 && character <= 90)) || (includeLowercaseLetters && (character >= 97 && character <= 122))) {
 					generatedPassword += character;
 				} else {
 					--x;
