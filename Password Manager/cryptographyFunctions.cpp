@@ -5,7 +5,6 @@
 #include "cryptopp/osrng.h"
 #include <string>
 #include <utility>
-#include "omp.h"
 
 std::pair <std::string, std::string> hash(const std::string& masterPassword, std::string salt) {
 	if(salt.empty()) {
