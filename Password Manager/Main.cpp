@@ -118,12 +118,12 @@ int main() {
 				std::cout << "Invalid Input!\n\n";
 				clearInputBuffer();
 			}
-			int includeSymbols{ 0 };
+			int includeSpecialCharacters{ 0 };
 			int includeNumbers{ 0 };
 			int includeUppercaseLetters{ 0 };
 			int includeLowercaseLetters{ 0 };
 			do {
-				while((std::cout << "Enter '1' to include symbols, '0' to exclude symbols: " && !(std::cin >> includeSymbols)) || (includeSymbols != 1 && includeSymbols != 0)) {
+				while((std::cout << "Enter '1' to include symbols, '0' to exclude symbols: " && !(std::cin >> includeSpecialCharacters)) || (includeSpecialCharacters != 1 && includeSpecialCharacters != 0)) {
 					std::cout << "Invalid Input!\n\n";
 					clearInputBuffer();
 				}
@@ -139,16 +139,25 @@ int main() {
 					std::cout << "Invalid Input!\n\n";
 					clearInputBuffer();
 				}
-			} while(!(includeSymbols || includeNumbers || includeUppercaseLetters || includeLowercaseLetters) && (std::cout << "Invalid Inputs!\n\n"));
+			} while(!(includeSpecialCharacters || includeNumbers || includeUppercaseLetters || includeLowercaseLetters) && (std::cout << "Invalid Inputs!\n\n"));
 			std::string generatedPassword;
+
 			for(int x{ 0 }; x < lengthOfGeneratedPassword; x++) {
-				if(char character{ generateCharacter() }; (includeSymbols && ((character >= 33 && character <= 47) || (character >= 58 && character <= 64) || (character >= 91 && character <= 96) || (character >= 123 && character <=
-					126))) || (includeNumbers && (character >= 48 && character <= 57)) || (includeUppercaseLetters && (character >= 65 && character <= 90)) || (includeLowercaseLetters && (character >= 97 && character <= 122))) {
+				char character{ generateCharacter() };
+
+				if(includeSpecialCharacters && std::ranges::find(specialCharacters, character) != specialCharacters.end()) {
+					generatedPassword += character;
+				} else if(includeNumbers && std::ranges::find(numbers, character) != numbers.end()) {
+					generatedPassword += character;
+				} else if(includeUppercaseLetters && std::ranges::find(uppercaseLetters, character) != uppercaseLetters.end()) {
+					generatedPassword += character;
+				} else if(includeLowercaseLetters && std::ranges::find(lowercaseLetters, character) != lowercaseLetters.end()) {
 					generatedPassword += character;
 				} else {
 					--x;
 				}
 			}
+
 			std::cout << "The generated password is: " << generatedPassword << '\n';
 			passwordGeneratorHistory.push_back(generatedPassword);
 			writePasswordGeneratorHistoryToFile(passwordGeneratorHistory, passwordGeneratorHistoryPath);

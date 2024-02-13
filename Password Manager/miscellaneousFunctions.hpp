@@ -7,9 +7,14 @@
 
 namespace fs = std::filesystem;
 
+extern const std::array <char, 32> specialCharacters;
+extern const std::array <char, 10> numbers;
+extern const std::array <char, 26> uppercaseLetters;
+extern const std::array <char, 26> lowercaseLetters;
+
 void clearInputBuffer();
 std::string getMasterPasswordFromUser();
-bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword);
+bool checkIfPasswordMeetsRequirements(std::string_view masterPassword);
 void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAndSalt, const fs::path& masterPasswordPath);
 int menuChoice(int lowerBound, int upperBound);
 bool checkIfEnteredMasterPasswordIsValid(const std::string& tempMasterPassword, const fs::path& masterPasswordPath);
