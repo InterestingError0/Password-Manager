@@ -1,3 +1,4 @@
+#include "constants.hpp"
 #include "miscellaneousFunctions.hpp"
 #include "cryptographyFunctions.hpp"
 #include "readFromFileFunctions.hpp"
@@ -5,21 +6,20 @@
 #include "deleteFunctions.hpp"
 #include "checkIfDuplicateFunctions.hpp"
 #include "printFunctions.hpp"
+#include <cryptopp/osrng.h>
 #include <iostream>
 #include <string>
 #include <array>
 #include <vector>
 #include <filesystem>
 #include <thread>
-#include <chrono>
 #include "ncurses.h"
 
 namespace fs = std::filesystem;
 
 int main() {
 	initscr();
-	const fs::path masterPasswordPath{ "masterPassword.txt" };
-	if(!exists(masterPasswordPath)) {
+	if(!exists(masterPasswordPath) || is_empty(masterPasswordPath)) {
 		std::string masterPassword;
 		do {
 			printw("Enter the master password that you would like to use: ");
@@ -27,15 +27,14 @@ int main() {
 			masterPassword = getMasterPasswordFromUser();
 			printw("\n");
 		} while(!checkIfPasswordMeetsRequirements(masterPassword));
-		saveMasterPasswordToFile(hash(masterPassword), masterPasswordPath);
+		saveMasterPasswordToFile(hashMasterPassword(masterPassword));
 	}
-	const fs::path foldersPath{ "folders.txt" };
 	std::vector <std::string> folders;
-	if(!exists(foldersPath)) {
+	if(!exists(foldersPath) || is_empty(foldersPath)) {
 		folders = { "Email", "Entertainment", "Games", "News/Reference", "Productivity Tools", "None" };
-		writeFoldersToFile(folders, foldersPath);
+        writeToFile(vecToStr(folders), foldersPath);
 	} else {
-		readFoldersIntoVector(folders, foldersPath);
+        loadToVec(folders, loadFile(foldersPath));
 	}
 	while(true) {
 		printw("Enter your master password: ");
@@ -43,7 +42,7 @@ int main() {
 		printw("\n");
 		static int numberOfAttemptedLogins{ 1 };
 		static int time{ 10 };
-		if(checkIfEnteredMasterPasswordIsValid(masterPassword, masterPasswordPath)) {
+		if(checkIfEnteredMasterPasswordIsValid(masterPassword)) {
 			break;
 		}
 		if(!(numberOfAttemptedLogins % 5)) {
@@ -59,17 +58,33 @@ int main() {
 	refresh();
 	endwin();
 
-	const fs::path loginsPath{ "logins.txt" };
-	std::vector <std::array <std::string, 4>> logins;
-	readLoginsIntoVector(logins, loginsPath);
+	CryptoPP::AutoSeededRandomPool prng;
+	CryptoPP::SecByteBlock loginsIv(CryptoPP::AES::BLOCKSIZE);
+    std::vector <std::vector <std::string>> logins;
 
-	const fs::path passwordGeneratorHistoryPath{ "passwordGeneratorHistory.txt" };
-	std::vector <std::string> passwordGeneratorHistory;
-	readPasswordGeneratorHistoryIntoVector(passwordGeneratorHistory, passwordGeneratorHistoryPath);
+	if(!exists(loginsPath) || is_empty(loginsPath)) {
+		prng.GenerateBlock(loginsIv, loginsIv.size());
+	} else {
+        loadToVec(logins, loadFile(loginsPath), 4);
+    }
 
-	const fs::path secureNotesPath{ "secureNotes.txt" };
-	std::vector <std::array <std::string, 3>> secureNotes;
-	readSecureNotesIntoVector(secureNotes, secureNotesPath);
+	CryptoPP::SecByteBlock passwordGeneratorHistoryIv(CryptoPP::AES::BLOCKSIZE);
+    std::vector <std::string> passwordGeneratorHistory;
+
+	if(!exists(passwordGeneratorHistoryPath) || is_empty(passwordGeneratorHistoryPath)) {
+		prng.GenerateBlock(passwordGeneratorHistoryIv, passwordGeneratorHistoryIv.size());
+	} else {
+        loadToVec(logins, loadFile(passwordGeneratorHistoryPath));
+    }
+
+	CryptoPP::SecByteBlock secureNotesIv(CryptoPP::AES::BLOCKSIZE);
+    std::vector <std::vector <std::string>> secureNotes;
+
+	if(!exists(secureNotesPath) || is_empty(secureNotesPath)) {
+		prng.GenerateBlock(secureNotesIv, secureNotesIv.size());
+	} else {
+        loadToVec(logins, loadFile(passwordGeneratorHistoryPath), 3);
+    }
 
 	int mainMenuChoice;
 	do {
@@ -82,14 +97,15 @@ int main() {
 			switch(menuChoice(1, 3)) {
 			case 1: {
 				printFolders(folders);
-				std::array <std::string, 4> login{ getFolderNameFromUser(folders) };
+				std::vector <std::string> login{ getFolderNameFromUser(folders) };
+                login.resize(4);
 				std::cout << "Enter the web address followed by the username followed by the password: ";
 				std::cin >> login[1] >> login[2] >> login[3];
 				if(checkIfLoginIsDuplicate(logins, login[1], login[2])) {
 					std::cout << "Login with that web address and username already exists!\n\n";
 				} else {
 					logins.push_back(login);
-					writeLoginsToFile(logins, loginsPath);
+					writeToFile(vecToStr(logins), loginsPath);
 				}
 			}
 			break;
@@ -101,7 +117,7 @@ int main() {
 					std::cin >> inputWebAddress >> inputUsername;
 					if(deleteLoginIfLoginExists(logins, inputWebAddress, inputUsername)) {
 						std::cout << "Login successfully deleted!\n\n";
-						writeLoginsToFile(logins, loginsPath);
+                        writeToFile(vecToStr(logins), loginsPath);
 					} else {
 						std::cout << "Login doesn't exist!\n\n";
 					}
@@ -160,7 +176,7 @@ int main() {
 
 			std::cout << "The generated password is: " << generatedPassword << '\n';
 			passwordGeneratorHistory.push_back(generatedPassword);
-			writePasswordGeneratorHistoryToFile(passwordGeneratorHistory, passwordGeneratorHistoryPath);
+            writeToFile(vecToStr(passwordGeneratorHistory), passwordGeneratorHistoryPath);
 		}
 		break;
 		case 3:
@@ -168,9 +184,9 @@ int main() {
 				printPasswordGeneratorHistory(passwordGeneratorHistory);
 				std::cout << "\n\t1. Delete Password Generator History\n\t2. Back to the Main Menu\n\n";
 				if(menuChoice(1, 2) == 1) {
-					deletePasswordGeneratorHistory(passwordGeneratorHistory);
+					clearPasswordGeneratorHistory(passwordGeneratorHistory);
 					std::cout << "Password generator history has been deleted!\n\n";
-					writePasswordGeneratorHistoryToFile(passwordGeneratorHistory, passwordGeneratorHistoryPath);
+                    writeToFile(vecToStr(passwordGeneratorHistory), passwordGeneratorHistoryPath);
 				}
 			} else {
 				std::cout << "No passwords have been generated!\n\n";
@@ -182,7 +198,8 @@ int main() {
 			switch(menuChoice(1, 3)) {
 			case 1: {
 				printFolders(folders);
-				std::array <std::string, 3> secureNote{ getFolderNameFromUser(folders) };
+				std::vector <std::string> secureNote{ getFolderNameFromUser(folders) };
+                secureNote.resize(3);
 				std::cout << "Enter the title: ";
 				std::getline(std::cin >> std::ws, secureNote[1]);
 				std::cout << "Enter the contents: ";
@@ -191,7 +208,7 @@ int main() {
 					std::cout << "Secure note with title " << secureNote[1] << "already exists!\n\n";
 				} else {
 					secureNotes.push_back(secureNote);
-					writeSecureNotesToFile(secureNotes, secureNotesPath);
+                    writeToFile(vecToStr(secureNotes), secureNotesPath);
 				}
 			}
 			break;
@@ -202,8 +219,8 @@ int main() {
 					std::getline(std::cin >> std::ws, inputTitle);
 					if(deleteSecureNoteIfSecureNoteExists(secureNotes, inputTitle)) {
 						std::cout << "Secure note successfully deleted!\n\n";
-						writeSecureNotesToFile(secureNotes, secureNotesPath);
-					} else {
+                        writeToFile(vecToStr(secureNotes), secureNotesPath);
+                    } else {
 						std::cout << "Secure Note Doesn't Exist!\n\n";
 					}
 				} else {
@@ -222,8 +239,8 @@ int main() {
 					std::cout << "Folder already exists!\n\n";
 				} else {
 					folders.push_back(getFolderNameFromUser(folders));
-					writeFoldersToFile(folders, foldersPath);
-				}
+                    writeToFile(vecToStr(folders), foldersPath);
+                }
 			}
 			break;
 			case 2:
@@ -231,8 +248,8 @@ int main() {
 				if(inputFolderName != "None") {
 					if(deleteFolderIfFolderExists(folders, inputFolderName)) {
 						std::cout << "Folder successfully deleted!\n\n";
-						writeFoldersToFile(folders, foldersPath);
-					} else {
+                        writeToFile(vecToStr(folders), foldersPath);
+                    } else {
 						std::cout << "Login doesn't exist!\n\n";
 					}
 				} else {
@@ -243,6 +260,4 @@ int main() {
 			break;
 		}
 	} while(mainMenuChoice != 6);
-
-	return 0;
 }

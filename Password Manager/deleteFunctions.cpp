@@ -4,7 +4,7 @@
 #include <vector>
 #include <array>
 
-bool deleteLoginIfLoginExists(std::vector <std::array <std::string, 4>>& logins, const std::string_view webAddress, const std::string_view username) {
+bool deleteLoginIfLoginExists(std::vector <std::vector <std::string>>& logins, const std::string_view webAddress, const std::string_view username) {
 	for(auto it{ logins.begin() }; it != logins.end(); ++it) {
 		if((*it)[1] == webAddress && (*it)[2] == username) {
 			logins.erase(it);
@@ -14,11 +14,11 @@ bool deleteLoginIfLoginExists(std::vector <std::array <std::string, 4>>& logins,
 	return false;
 }
 
-void deletePasswordGeneratorHistory(std::vector <std::string>& passwordGeneratorHistory) {
+void clearPasswordGeneratorHistory(std::vector <std::string>& passwordGeneratorHistory) {
 	passwordGeneratorHistory.resize(0);
 }
 
-bool deleteSecureNoteIfSecureNoteExists(std::vector <std::array <std::string, 3>>& secureNotes, const std::string_view title) {
+bool deleteSecureNoteIfSecureNoteExists(std::vector <std::vector <std::string>>& secureNotes, const std::string_view title) {
 	for(auto it{ secureNotes.begin() }; it != secureNotes.end(); ++it) {
 		if((*it)[1] == title) {
 			secureNotes.erase(it);

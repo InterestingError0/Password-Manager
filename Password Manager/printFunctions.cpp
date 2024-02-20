@@ -5,14 +5,14 @@
 #include <array>
 #include <cstddef>
 
-void printAllLogins(const std::vector <std::array <std::string, 4>>& logins) {
+void printAllLogins(const std::vector <std::vector <std::string>>& logins) {
 	std::cout << "Here are the logins stored in your vault:\n\n";
 	for(std::size_t i{ 0 }; i < logins.size(); i++) {
 		std::cout << "Folder: " << logins[i][0] << "\nWeb Address: " << logins[i][1] << "\nUsername: " << logins[i][2] << "\nPassword: " << logins[i][3] << "\n\n";
 	}
 }
 
-bool printLoginsInFolder(const std::vector <std::array <std::string, 4>>& logins, const std::string_view folder) {
+bool printLoginsInFolder(const std::vector <std::vector <std::string>>& logins, const std::string_view folder) {
 	bool noLoginsInFolder{ true };
 	for(std::size_t i{ 0 }; i < logins.size(); i++) {
 		if(logins[i][0] == folder) {
@@ -30,14 +30,14 @@ void printPasswordGeneratorHistory(const std::vector <std::string>& passwordGene
 	}
 }
 
-void printAllSecureNotes(const std::vector <std::array <std::string, 3>>& secureNotes) {
+void printAllSecureNotes(const std::vector <std::vector <std::string>>& secureNotes) {
 	std::cout << "Here are the secure notes stored in your vault:\n\n";
 	for(std::size_t i{ 0 }; i < secureNotes.size(); i++) {
 		std::cout << "Folder: " << secureNotes[i][0] << "\nTitle: " << secureNotes[i][1] << "\nContent: " << secureNotes[i][2] << "\n\n";
 	}
 }
 
-bool printSecureNotesInFolder(const std::vector <std::array <std::string, 3>>& secureNotes, const std::string_view folder) {
+bool printSecureNotesInFolder(const std::vector <std::vector <std::string>>& secureNotes, const std::string_view folder) {
 	bool noSecureNotesInFolder{ true };
 	for(std::size_t i{ 0 }; i < secureNotes.size(); i++) {
 		noSecureNotesInFolder = false;

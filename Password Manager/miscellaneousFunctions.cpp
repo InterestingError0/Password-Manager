@@ -1,6 +1,6 @@
 #include "miscellaneousFunctions.hpp"
+#include "constants.hpp"
 #include "cryptographyFunctions.hpp"
-#include "cryptopp/cryptlib.h"
 #include "cryptopp/secblock.h"
 #include "cryptopp/osrng.h"
 #include "cryptopp/hex.h"
@@ -8,18 +8,11 @@
 #include <iostream>
 #include <string>
 #include <string_view>
-#include <fstream>
-#include <filesystem>
 #include <limits>
 #include <utility>
 #include "ncurses.h"
 
 namespace fs = std::filesystem;
-
-const std::array <char, 32> specialCharacters{ '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~' };
-const std::array <char, 10> numbers{ '0', '1', '2' ,'3', '4', '5', '6', '7', '8', '9' };
-const std::array <char, 26> uppercaseLetters{ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-const std::array <char, 26> lowercaseLetters{ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
 void clearInputBuffer() {
 	std::cin.clear();
@@ -83,8 +76,13 @@ bool checkIfPasswordMeetsRequirements(const std::string_view masterPassword) {
 	return passwordMeetsRequirements;
 }
 
-void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAndSalt, const fs::path& masterPasswordPath) {
-	CryptoPP::StringSource ss1(hashAndSalt.second + '\n' + hashAndSalt.first, true, new CryptoPP::HexEncoder(new CryptoPP::FileSink("masterPassword.txt")));
+void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAndSalt) {
+    std::string hashEncoded;
+    std::string saltEncoded;
+    CryptoPP::StringSource(hashAndSalt.second, true, new CryptoPP::HexEncoder(new CryptoPP::StringSink(saltEncoded)));
+    CryptoPP::StringSource(hashAndSalt.first, true, new CryptoPP::HexEncoder(new CryptoPP::StringSink(hashEncoded)));
+
+    CryptoPP::StringSource(saltEncoded + hashEncoded, true, new CryptoPP::FileSink(masterPasswordPath.c_str()));
 }
 
 int menuChoice(const int lowerBound, const int upperBound) {
@@ -96,19 +94,15 @@ int menuChoice(const int lowerBound, const int upperBound) {
 	return choice;
 }
 
-bool checkIfEnteredMasterPasswordIsValid(const std::string& tempMasterPassword, const fs::path& masterPasswordPath) {
-	std::string str;
-	CryptoPP::FileSource fs1("masterPassword.txt", true, new CryptoPP::HexDecoder(new CryptoPP::StringSink(str)));
+bool checkIfEnteredMasterPasswordIsValid(const std::string& tempMasterPassword) {
+    std::string hash;
+    CryptoPP::FileSource fs(masterPasswordPath.c_str(), false, new CryptoPP::HexDecoder(new CryptoPP::StringSink(hash)));
+    fs.Pump(64);
+    const std::string salt{ hash };
+    hash.clear();
+    fs.PumpAll();
 
-	std::string salt;
-	for(const char c : str) {
-		if(c == '\n') {
-			break;
-		}
-		salt += c;
-	}
-
-	if(hash(tempMasterPassword, salt).first == str.substr(salt.length() + 1)) {
+	if(hashMasterPassword(tempMasterPassword, salt).first == hash) {
 		return true;
 	}
 	return false;

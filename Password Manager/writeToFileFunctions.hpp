@@ -3,10 +3,26 @@
 #include <vector>
 #include <array>
 #include <filesystem>
+#include <cryptopp/secblock.h>
 
 namespace fs = std::filesystem;
 
-void writeFoldersToFile(const std::vector <std::string>& folders, const fs::path& foldersPath);
-void writeLoginsToFile(const std::vector <std::array <std::string, 4>>& logins, const fs::path& loginsPath);
-void writePasswordGeneratorHistoryToFile(const std::vector <std::string>& passwordGeneratorHistory, const fs::path& passwordGeneratorHistoryPath);
-void writeSecureNotesToFile(const std::vector <std::array <std::string, 3>>& secureNotes, const fs::path& secureNotesPath);
+template <typename T>
+std::string vecToStr(const std::vector <T>& vec) {
+    std::string output;
+
+    if constexpr(std::is_same_v<T, std::string>) {
+        for(const std::string& str : vec) {
+            output += str + "\n";
+        }
+    } else {
+        for(const std::vector <std::string>& outerVec : vec) {
+            for(const std::string& str : outerVec) {
+                output += str + "\n";
+            }
+        }
+    }
+    return output;
+}
+
+void writeToFile(const std::string& data, const fs::path& filePath);

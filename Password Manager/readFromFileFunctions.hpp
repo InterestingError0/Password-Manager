@@ -6,7 +6,29 @@
 
 namespace fs = std::filesystem;
 
-void readFoldersIntoVector(std::vector <std::string>& folders, const fs::path& foldersPath);
-void readLoginsIntoVector(std::vector <std::array <std::string, 4>>& logins, const fs::path& loginsPath);
-void readPasswordGeneratorHistoryIntoVector(std::vector <std::string>& passwordGeneratorHistory, const fs::path& passwordGeneratorHistoryPath);
-void readSecureNotesIntoVector(std::vector <std::array <std::string, 3>>& secureNotes, const fs::path& secureNotesPath);
+template <typename T>
+void loadToVec(std::vector <T>& vec, const std::string& str, const std::size_t innerVecSize = 0) {
+    if constexpr(std::is_same_v<T, std::string>) {
+        for(std::size_t i{ 0 }, prevDelimPos{ 0 }; i < str.length(); i++) {
+            if(str[i] == '\n') {
+                vec.push_back(str.substr(prevDelimPos, i - prevDelimPos));
+                prevDelimPos = i + 1;
+            }
+        }
+    } else {
+        std::vector <std::string> innerVec;
+
+        for(std::size_t i{ 0 }, prevI{ 0 }; i < str.length(); i++) {
+            if(str[i] == '\n') {
+                innerVec.push_back(str.substr(prevI, i - prevI));
+                prevI = i + 1;
+            }
+            if(innerVec.size() == innerVecSize) {
+                vec.push_back(innerVec);
+                innerVec.clear();
+            }
+        }
+    }
+}
+
+std::string loadFile(const fs::path& filePath);
