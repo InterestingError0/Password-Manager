@@ -9,8 +9,7 @@ find_package(cryptopp CONFIG REQUIRED)
 find_package(Curses REQUIRED)
 find_package(OpenMP REQUIRED)
 
-add_executable(Password_Manager Main.cpp checkIfDuplicateFunctions.cpp cryptographyFunctions.cpp deleteFunctions.cpp miscellaneousFunctions.cpp printFunctions.cpp readFromFileFunctions.cpp writeToFileFunctions.cpp
-		constants.hpp)
+add_executable(Password_Manager Main.cpp checkIfDuplicateFunctions.cpp cryptographyFunctions.cpp deleteFunctions.cpp miscellaneousFunctions.cpp printFunctions.cpp readFromFileFunctions.cpp writeToFileFunctions.cpp)
 
 target_link_libraries(Password_Manager cryptopp::cryptopp)
 target_link_libraries(Password_Manager ${CURSES_LIBRARIES})
