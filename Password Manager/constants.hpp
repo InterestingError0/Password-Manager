@@ -1,9 +1,10 @@
 #pragma once
-
 #include <filesystem>
 #include <array>
 
 namespace fs = std::filesystem;
+
+constexpr int tagSize{ 12 };
 
 const fs::path masterPasswordPath{ "masterPassword.txt" };
 const fs::path foldersPath{ "folders.txt" };

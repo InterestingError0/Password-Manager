@@ -1,9 +1,10 @@
 #include "cryptographyFunctions.hpp"
+#include "constants.hpp"
 #include "cryptopp/scrypt.h"
 #include "cryptopp/rijndael.h"
-#include "cryptopp/modes.h"
 #include "cryptopp/secblock.h"
 #include "cryptopp/osrng.h"
+#include "cryptopp/gcm.h"
 #include <string>
 #include <utility>
 
@@ -23,22 +24,26 @@ std::pair <std::string, std::string> hashMasterPassword(const std::string& maste
 }
 
 std::string encrypt(const std::string& plainText, CryptoPP::SecByteBlock key, CryptoPP::SecByteBlock iv) {
-	CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption e;
+	CryptoPP::GCM<CryptoPP::AES>::Encryption e;
 	e.SetKeyWithIV(key, key.size(), iv, iv.size());
 
 	std::string encrypted;
 
-	CryptoPP::StringSource s(plainText, true, new CryptoPP::StreamTransformationFilter(e, new CryptoPP::StringSink(encrypted)));
+	CryptoPP::StringSource(plainText, true, new CryptoPP::AuthenticatedEncryptionFilter(e, new CryptoPP::StringSink(encrypted), false, tagSize));
 
 	return encrypted;
 }
 
 std::string decrypt(const std::string& encrypted, CryptoPP::SecByteBlock key, CryptoPP::SecByteBlock iv) {
 	std::string decrypted;
-	CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption d;
+	CryptoPP::GCM<CryptoPP::AES>::Decryption d;
 	d.SetKeyWithIV(key, key.size(), iv, iv.size());
+    CryptoPP::AuthenticatedDecryptionFilter df( d, new CryptoPP::StringSink(decrypted), CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_FLAGS, tagSize);
+    CryptoPP::StringSource( encrypted, true, new CryptoPP::Redirector(df));
 
-	CryptoPP::StringSource s(encrypted, true, new CryptoPP::StreamTransformationFilter(d, new CryptoPP::StringSink(decrypted)));
+    if(df.GetLastResult()) {
+        return decrypted;
+    }
 
-	return decrypted;
+	return "";
 }

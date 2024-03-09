@@ -1,4 +1,5 @@
 #pragma once
+#include <cryptopp/secblock.h>
 #include <string>
 #include <vector>
 #include <array>
@@ -31,4 +32,4 @@ void loadToVec(std::vector <T>& vec, const std::string& str, const std::size_t i
     }
 }
 
-std::string loadFile(const fs::path& filePath);
+std::string loadFile(CryptoPP::SecByteBlock& iv, const fs::path& filePath);

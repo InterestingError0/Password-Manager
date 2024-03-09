@@ -2,8 +2,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <array>
-#include <cstddef>
 
 void printAllLogins(const std::vector <std::vector <std::string>>& logins) {
 	std::cout << "Here are the logins stored in your vault:\n\n";

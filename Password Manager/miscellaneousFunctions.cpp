@@ -12,8 +12,6 @@
 #include <utility>
 #include "ncurses.h"
 
-namespace fs = std::filesystem;
-
 void clearInputBuffer() {
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits <std::streamsize>::max(), '\n');
@@ -33,8 +31,8 @@ std::string getMasterPasswordFromUser() {
 		if((inputChar == 127 || inputChar == 8) && masterPassword.empty()) {
 			continue;
 		}
-		masterPassword.push_back(inputChar);
-		printw("*");
+        masterPassword.push_back(inputChar);
+        printw("*");
 	}
 	printw("\n");
 	nocbreak();

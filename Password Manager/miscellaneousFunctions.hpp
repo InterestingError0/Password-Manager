@@ -6,8 +6,6 @@
 #include <filesystem>
 #include <utility>
 
-namespace fs = std::filesystem;
-
 void clearInputBuffer();
 std::string getMasterPasswordFromUser();
 bool checkIfPasswordMeetsRequirements(std::string_view masterPassword);

@@ -25,4 +25,4 @@ std::string vecToStr(const std::vector <T>& vec) {
     return output;
 }
 
-void writeToFile(const std::string& data, const fs::path& filePath);
+void writeToFile(const std::string& data, const CryptoPP::SecByteBlock& iv, const fs::path& filePath);

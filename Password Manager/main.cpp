@@ -9,13 +9,10 @@
 #include <cryptopp/osrng.h>
 #include <iostream>
 #include <string>
-#include <array>
 #include <vector>
 #include <filesystem>
 #include <thread>
 #include "ncurses.h"
-
-namespace fs = std::filesystem;
 
 int main() {
 	initscr();
@@ -29,12 +26,15 @@ int main() {
 		} while(!checkIfPasswordMeetsRequirements(masterPassword));
 		saveMasterPasswordToFile(hashMasterPassword(masterPassword));
 	}
+    CryptoPP::AutoSeededRandomPool prng;
+    CryptoPP::SecByteBlock foldersIv(CryptoPP::AES::BLOCKSIZE);
 	std::vector <std::string> folders;
 	if(!exists(foldersPath) || is_empty(foldersPath)) {
 		folders = { "Email", "Entertainment", "Games", "News/Reference", "Productivity Tools", "None" };
-        writeToFile(vecToStr(folders), foldersPath);
+        prng.GenerateBlock(foldersIv, foldersIv.size());
+        writeToFile(vecToStr(folders), foldersIv, foldersPath);
 	} else {
-        loadToVec(folders, loadFile(foldersPath));
+        loadToVec(folders, loadFile(foldersIv, foldersPath));
 	}
 	while(true) {
 		printw("Enter your master password: ");
@@ -58,14 +58,13 @@ int main() {
 	refresh();
 	endwin();
 
-	CryptoPP::AutoSeededRandomPool prng;
 	CryptoPP::SecByteBlock loginsIv(CryptoPP::AES::BLOCKSIZE);
     std::vector <std::vector <std::string>> logins;
 
 	if(!exists(loginsPath) || is_empty(loginsPath)) {
 		prng.GenerateBlock(loginsIv, loginsIv.size());
 	} else {
-        loadToVec(logins, loadFile(loginsPath), 4);
+        loadToVec(logins, loadFile(loginsIv, loginsPath), 4);
     }
 
 	CryptoPP::SecByteBlock passwordGeneratorHistoryIv(CryptoPP::AES::BLOCKSIZE);
@@ -74,7 +73,7 @@ int main() {
 	if(!exists(passwordGeneratorHistoryPath) || is_empty(passwordGeneratorHistoryPath)) {
 		prng.GenerateBlock(passwordGeneratorHistoryIv, passwordGeneratorHistoryIv.size());
 	} else {
-        loadToVec(logins, loadFile(passwordGeneratorHistoryPath));
+        loadToVec(logins, loadFile(passwordGeneratorHistoryIv, passwordGeneratorHistoryPath));
     }
 
 	CryptoPP::SecByteBlock secureNotesIv(CryptoPP::AES::BLOCKSIZE);
@@ -83,7 +82,7 @@ int main() {
 	if(!exists(secureNotesPath) || is_empty(secureNotesPath)) {
 		prng.GenerateBlock(secureNotesIv, secureNotesIv.size());
 	} else {
-        loadToVec(logins, loadFile(passwordGeneratorHistoryPath), 3);
+        loadToVec(logins, loadFile(secureNotesIv, secureNotesPath), 3);
     }
 
 	int mainMenuChoice;
@@ -105,7 +104,7 @@ int main() {
 					std::cout << "Login with that web address and username already exists!\n\n";
 				} else {
 					logins.push_back(login);
-					writeToFile(vecToStr(logins), loginsPath);
+					writeToFile(vecToStr(logins), loginsIv, loginsPath);
 				}
 			}
 			break;
@@ -117,7 +116,7 @@ int main() {
 					std::cin >> inputWebAddress >> inputUsername;
 					if(deleteLoginIfLoginExists(logins, inputWebAddress, inputUsername)) {
 						std::cout << "Login successfully deleted!\n\n";
-                        writeToFile(vecToStr(logins), loginsPath);
+                        writeToFile(vecToStr(logins), loginsIv, loginsPath);
 					} else {
 						std::cout << "Login doesn't exist!\n\n";
 					}
@@ -161,13 +160,7 @@ int main() {
 			for(int x{ 0 }; x < lengthOfGeneratedPassword; x++) {
 				char character{ generateCharacter() };
 
-				if(includeSpecialCharacters && std::ranges::find(specialCharacters, character) != specialCharacters.end()) {
-					generatedPassword += character;
-				} else if(includeNumbers && std::ranges::find(numbers, character) != numbers.end()) {
-					generatedPassword += character;
-				} else if(includeUppercaseLetters && std::ranges::find(uppercaseLetters, character) != uppercaseLetters.end()) {
-					generatedPassword += character;
-				} else if(includeLowercaseLetters && std::ranges::find(lowercaseLetters, character) != lowercaseLetters.end()) {
+				if((includeSpecialCharacters && std::ranges::find(specialCharacters, character) != specialCharacters.end()) || (includeNumbers && std::ranges::find(numbers, character) != numbers.end()) || (includeUppercaseLetters && std::ranges::find(uppercaseLetters, character) != uppercaseLetters.end()) || (includeLowercaseLetters && std::ranges::find(lowercaseLetters, character) != lowercaseLetters.end())) {
 					generatedPassword += character;
 				} else {
 					--x;
@@ -176,7 +169,7 @@ int main() {
 
 			std::cout << "The generated password is: " << generatedPassword << '\n';
 			passwordGeneratorHistory.push_back(generatedPassword);
-            writeToFile(vecToStr(passwordGeneratorHistory), passwordGeneratorHistoryPath);
+            writeToFile(vecToStr(passwordGeneratorHistory), passwordGeneratorHistoryIv, passwordGeneratorHistoryPath);
 		}
 		break;
 		case 3:
@@ -186,7 +179,7 @@ int main() {
 				if(menuChoice(1, 2) == 1) {
 					clearPasswordGeneratorHistory(passwordGeneratorHistory);
 					std::cout << "Password generator history has been deleted!\n\n";
-                    writeToFile(vecToStr(passwordGeneratorHistory), passwordGeneratorHistoryPath);
+                    writeToFile(vecToStr(passwordGeneratorHistory), passwordGeneratorHistoryIv, passwordGeneratorHistoryPath);
 				}
 			} else {
 				std::cout << "No passwords have been generated!\n\n";
@@ -208,7 +201,7 @@ int main() {
 					std::cout << "Secure note with title " << secureNote[1] << "already exists!\n\n";
 				} else {
 					secureNotes.push_back(secureNote);
-                    writeToFile(vecToStr(secureNotes), secureNotesPath);
+                    writeToFile(vecToStr(secureNotes), secureNotesIv, secureNotesPath);
 				}
 			}
 			break;
@@ -219,7 +212,7 @@ int main() {
 					std::getline(std::cin >> std::ws, inputTitle);
 					if(deleteSecureNoteIfSecureNoteExists(secureNotes, inputTitle)) {
 						std::cout << "Secure note successfully deleted!\n\n";
-                        writeToFile(vecToStr(secureNotes), secureNotesPath);
+                        writeToFile(vecToStr(secureNotes), secureNotesIv, secureNotesPath);
                     } else {
 						std::cout << "Secure Note Doesn't Exist!\n\n";
 					}
@@ -239,7 +232,7 @@ int main() {
 					std::cout << "Folder already exists!\n\n";
 				} else {
 					folders.push_back(getFolderNameFromUser(folders));
-                    writeToFile(vecToStr(folders), foldersPath);
+                    writeToFile(vecToStr(folders), foldersIv, foldersPath);
                 }
 			}
 			break;
@@ -248,7 +241,7 @@ int main() {
 				if(inputFolderName != "None") {
 					if(deleteFolderIfFolderExists(folders, inputFolderName)) {
 						std::cout << "Folder successfully deleted!\n\n";
-                        writeToFile(vecToStr(folders), foldersPath);
+                        writeToFile(vecToStr(folders), foldersIv, foldersPath);
                     } else {
 						std::cout << "Login doesn't exist!\n\n";
 					}
