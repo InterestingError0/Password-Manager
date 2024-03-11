@@ -53,7 +53,7 @@ int main() {
 	                                                   &passwordGeneratorHistory::generatedPassword)),
 	                            make_table("secureNotes",
 	                                       make_column("id", &secureNotes::id, primary_key().autoincrement()),
-	                                       make_column("folder", &logins::folder),
+	                                       make_column("folder", &secureNotes::folder),
 	                                       make_column("title", &secureNotes::title),
 	                                       make_column("contents", &secureNotes::contents)),
 	                            make_table("folders",
