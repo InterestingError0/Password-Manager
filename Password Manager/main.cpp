@@ -263,12 +263,13 @@ int main() {
 				std::cout << "\t1. Add Folders\n\t2. Delete Folders\n\t3. Back to the Main Menu\n\n";
 				switch(menuChoice(1, 3)) {
 					case 1: {
+						std::string inputFolderName{ getFolderNameFromUser() };
 						if(!storage.select(1, from<folders>(),
-						                   where(is_equal(&folders::folder, getFolderNameFromUser()))).empty()) {
+						                   where(is_equal(&folders::folder, inputFolderName))).empty()) {
 							std::cout << "Folder already exists!\n\n";
 						} else {
 							storage.insert(into<folders>(), columns(&folders::folder),
-							               values(std::make_tuple(getFolderNameFromUser())));
+							               values(std::make_tuple(inputFolderName)));
 						}
 					}
 						break;
