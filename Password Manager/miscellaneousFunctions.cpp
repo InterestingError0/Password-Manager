@@ -106,15 +106,6 @@ bool checkIfEnteredMasterPasswordIsValid(const std::string& tempMasterPassword) 
 	return false;
 }
 
-std::string getFolderNameFromUser() {
-	std::string folderName;
-	while((std::cout << "Enter the folder name: ") && (std::cin >> folderName)) {
-		break;
-		std::cout << "Invalid Input!\n\n";
-	}
-	return folderName;
-}
-
 char generateCharacter() {
 	CryptoPP::AutoSeededRandomPool prng;
 	CryptoPP::SecByteBlock gen(1);

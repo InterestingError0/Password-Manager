@@ -97,14 +97,10 @@ int main() {
 						}
 						std::cout << '\n';
 						std::string inputFolderName;
-						while(true) {
-							inputFolderName = getFolderNameFromUser();
-							if(storage.select(1, from<folders>(),
-							                  where(is_equal(&folders::folder, inputFolderName))).empty()) {
-								std::cout << "Invalid Input!\n\n";
-							} else {
-								break;
-							}
+						while((std::cout << "Enter the folder name: ") && (std::cin >> inputFolderName) &&
+						      storage.select(1, from<folders>(),
+						                     where(is_equal(&folders::folder, inputFolderName))).empty()) {
+							std::cout << "Invalid Input!\n\n";
 						}
 						std::vector<std::string> login{ inputFolderName };
 						login.resize(4);
@@ -239,14 +235,10 @@ int main() {
 						}
 						std::cout << '\n';
 						std::string inputFolderName;
-						while(true) {
-							inputFolderName = getFolderNameFromUser();
-							if(storage.select(1, from<folders>(),
-							                  where(is_equal(&folders::folder, inputFolderName))).empty()) {
-								std::cout << "Invalid Input!\n\n";
-							} else {
-								break;
-							}
+						while((std::cout << "Enter the folder name: ") && (std::cin >> inputFolderName) &&
+						      storage.select(1, from<folders>(),
+						                     where(is_equal(&folders::folder, inputFolderName))).empty()) {
+							std::cout << "Invalid Input!\n\n";
 						}
 						std::vector<std::string> secureNote{ inputFolderName };
 						secureNote.resize(3);
@@ -293,7 +285,8 @@ int main() {
 				std::cout << "\t1. Add Folders\n\t2. Delete Folders\n\t3. Back to the Main Menu\n\n";
 				switch(menuChoice(1, 3)) {
 					case 1: {
-						std::string inputFolderName{ getFolderNameFromUser() };
+						std::string inputFolderName;
+						std::cin >> inputFolderName;
 						if(!storage.select(1, from<folders>(),
 						                   where(is_equal(&folders::folder, inputFolderName))).empty()) {
 							std::cout << "Folder already exists!\n\n";
@@ -304,7 +297,8 @@ int main() {
 					}
 						break;
 					case 2:
-						std::string inputFolderName{ getFolderNameFromUser() };
+						std::string inputFolderName;
+						std::cin >> inputFolderName;
 						if(inputFolderName != "None") {
 							if(!storage.select(1, from<folders>(),
 							                   where(is_equal(&folders::folder, inputFolderName))).empty()) {
