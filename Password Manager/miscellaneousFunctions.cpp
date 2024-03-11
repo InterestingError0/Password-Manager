@@ -106,9 +106,10 @@ bool checkIfEnteredMasterPasswordIsValid(const std::string& tempMasterPassword) 
 	return false;
 }
 
-std::string getFolderNameFromUser(const std::vector <std::string>& folders) {
+std::string getFolderNameFromUser() {
 	std::string folderName;
-	while((std::cout << "Enter the folder name: ") && (std::cin >> folderName) && std::ranges::find(folders, folderName) == folders.end()) {
+	while((std::cout << "Enter the folder name: ") && (std::cin >> folderName)) {
+		break;
 		std::cout << "Invalid Input!\n\n";
 	}
 	return folderName;

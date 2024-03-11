@@ -4,13 +4,7 @@
 
 namespace fs = std::filesystem;
 
-constexpr int tagSize{ 12 };
-
 const fs::path masterPasswordPath{ "masterPassword.txt" };
-const fs::path foldersPath{ "folders.txt" };
-const fs::path loginsPath{ "logins.txt" };
-const fs::path passwordGeneratorHistoryPath{ "passwordGeneratorHistory.txt" };
-const fs::path secureNotesPath{ "secureNotes.txt" };
 
 constexpr std::array <char, 32> specialCharacters{ '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~' };
 constexpr std::array <char, 10> numbers{ '0', '1', '2' ,'3', '4', '5', '6', '7', '8', '9' };

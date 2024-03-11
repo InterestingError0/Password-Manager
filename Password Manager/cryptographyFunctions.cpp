@@ -22,28 +22,3 @@ std::pair <std::string, std::string> hashMasterPassword(const std::string& maste
 
 	return std::make_pair(hash, salt);
 }
-
-std::string encrypt(const std::string& plainText, CryptoPP::SecByteBlock key, CryptoPP::SecByteBlock iv) {
-	CryptoPP::GCM<CryptoPP::AES>::Encryption e;
-	e.SetKeyWithIV(key, key.size(), iv, iv.size());
-
-	std::string encrypted;
-
-	CryptoPP::StringSource(plainText, true, new CryptoPP::AuthenticatedEncryptionFilter(e, new CryptoPP::StringSink(encrypted), false, tagSize));
-
-	return encrypted;
-}
-
-std::string decrypt(const std::string& encrypted, CryptoPP::SecByteBlock key, CryptoPP::SecByteBlock iv) {
-	std::string decrypted;
-	CryptoPP::GCM<CryptoPP::AES>::Decryption d;
-	d.SetKeyWithIV(key, key.size(), iv, iv.size());
-    CryptoPP::AuthenticatedDecryptionFilter df( d, new CryptoPP::StringSink(decrypted), CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_FLAGS, tagSize);
-    CryptoPP::StringSource( encrypted, true, new CryptoPP::Redirector(df));
-
-    if(df.GetLastResult()) {
-        return decrypted;
-    }
-
-	return "";
-}
