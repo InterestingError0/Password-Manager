@@ -286,7 +286,7 @@ int main() {
 				switch(menuChoice(1, 3)) {
 					case 1: {
 						std::string inputFolderName;
-						std::cin >> inputFolderName;
+						std::getline(std::cin >> std::ws, inputFolderName);
 						if(!storage.select(1, from<folders>(),
 						                   where(is_equal(&folders::folder, inputFolderName))).empty()) {
 							std::cout << "Folder already exists!\n\n";
@@ -298,7 +298,7 @@ int main() {
 						break;
 					case 2:
 						std::string inputFolderName;
-						std::cin >> inputFolderName;
+						std::getline(std::cin >> std::ws, inputFolderName);
 						if(inputFolderName != "None") {
 							if(!storage.select(1, from<folders>(),
 							                   where(is_equal(&folders::folder, inputFolderName))).empty()) {
