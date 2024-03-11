@@ -66,6 +66,13 @@ int main() {
 	storage.open_forever();
 	storage.sync_schema();
 
+	if(storage.select(1, from<folders>()).empty()) {
+		storage.insert(into<folders>(), columns(&folders::folder),
+		               values(std::make_tuple("Email"), std::make_tuple("Entertainment"), std::make_tuple("Games"),
+		                      std::make_tuple("News/Reference"), std::make_tuple("Productivity Tools"),
+		                      std::make_tuple("None")));
+	}
+
 	int mainMenuChoice;
 	do {
 		std::cout
@@ -84,11 +91,22 @@ int main() {
 				switch(menuChoice(1, 3)) {
 					case 1: {
 						auto foldersVec = storage.select(columns(&folders::folder));
+						std::cout << "Here are the folders currently available:\n\n";
 						for(const auto &folder: foldersVec) {
 							std::cout << std::get<0>(folder) << '\n';
 						}
 						std::cout << '\n';
-						std::vector<std::string> login{ getFolderNameFromUser() };
+						std::string inputFolderName;
+						while(true) {
+							inputFolderName = getFolderNameFromUser();
+							if(storage.select(1, from<folders>(),
+							                  where(is_equal(&folders::folder, inputFolderName))).empty()) {
+								std::cout << "Invalid Input!\n\n";
+							} else {
+								break;
+							}
+						}
+						std::vector<std::string> login{ inputFolderName };
 						login.resize(4);
 						std::cout << "Enter the web address followed by the username followed by the password: ";
 						std::cin >> login[1] >> login[2] >> login[3];
@@ -215,11 +233,22 @@ int main() {
 				switch(menuChoice(1, 3)) {
 					case 1: {
 						auto foldersVec = storage.select(columns(&folders::folder));
+						std::cout << "Here are the folders currently available:\n\n";
 						for(const auto &folder: foldersVec) {
 							std::cout << std::get<0>(folder) << '\n';
 						}
 						std::cout << '\n';
-						std::vector<std::string> secureNote{ getFolderNameFromUser() };
+						std::string inputFolderName;
+						while(true) {
+							inputFolderName = getFolderNameFromUser();
+							if(storage.select(1, from<folders>(),
+							                  where(is_equal(&folders::folder, inputFolderName))).empty()) {
+								std::cout << "Invalid Input!\n\n";
+							} else {
+								break;
+							}
+						}
+						std::vector<std::string> secureNote{ inputFolderName };
 						secureNote.resize(3);
 						std::cout << "Enter the title: ";
 						std::getline(std::cin >> std::ws, secureNote[1]);
@@ -256,6 +285,7 @@ int main() {
 				break;
 			case 5:
 				auto foldersVec = storage.select(columns(&folders::folder));
+				std::cout << "Here are the folders currently available:\n\n";
 				for(const auto &folder: foldersVec) {
 					std::cout << std::get<0>(folder) << '\n';
 				}
