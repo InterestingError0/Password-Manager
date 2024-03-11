@@ -1,10 +1,7 @@
 #include "cryptographyFunctions.hpp"
-#include "constants.hpp"
 #include "cryptopp/scrypt.h"
-#include "cryptopp/rijndael.h"
 #include "cryptopp/secblock.h"
 #include "cryptopp/osrng.h"
-#include "cryptopp/gcm.h"
 #include <string>
 #include <utility>
 
