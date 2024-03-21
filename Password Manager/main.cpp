@@ -72,27 +72,42 @@ int main() {
 		                      std::make_tuple("News/Reference"), std::make_tuple("Productivity Tools"),
 		                      std::make_tuple("None")));
 	}
-	const auto loginsSelect = storage.prepare(select(columns(&logins::folder, &logins::website, &logins::username, &logins::password)));
-	auto loginExistsCheck = storage.prepare(select(1, from<logins>(), where(is_equal(&logins::website, "") and is_equal(&logins::username, "")), limit(1)));
+	const auto loginsSelect = storage.prepare(
+			select(columns(&logins::folder, &logins::website, &logins::username, &logins::password)));
+	auto loginExistsCheck = storage.prepare(
+			select(1, from<logins>(), where(is_equal(&logins::website, "") and is_equal(&logins::username, "")),
+			       limit(1)));
 	const auto loginsEmptyCheck = storage.prepare(select(1, from<logins>(), limit(1)));
-	auto loginInsert = storage.prepare(insert(into<logins>(), columns(&logins::folder, &logins::website, &logins::username, &logins::password), values(std::make_tuple("", "", "", ""))));
-	auto loginDelete = storage.prepare(remove_all<logins>(where(is_equal(&logins::website, "") and is_equal(&logins::username, ""))));
+	auto loginInsert = storage.prepare(
+			insert(into<logins>(), columns(&logins::folder, &logins::website, &logins::username, &logins::password),
+			       values(std::make_tuple("", "", "", ""))));
+	auto loginDelete = storage.prepare(
+			remove_all<logins>(where(is_equal(&logins::website, "") and is_equal(&logins::username, ""))));
 
-	auto passwordGeneratorHistoryInsert = storage.prepare(insert(into<passwordGeneratorHistory>(), columns(&passwordGeneratorHistory::generatedPassword), values(std::make_tuple(""))));
+	auto passwordGeneratorHistoryInsert = storage.prepare(
+			insert(into<passwordGeneratorHistory>(), columns(&passwordGeneratorHistory::generatedPassword),
+			       values(std::make_tuple(""))));
 	const auto passwordGeneratorHistorySelect = storage.prepare(select(&passwordGeneratorHistory::generatedPassword));
-	const auto passwordGeneratorHistoryEmptyCheck = storage.prepare(select(1, from<passwordGeneratorHistory>(), limit(1)));
+	const auto passwordGeneratorHistoryEmptyCheck = storage.prepare(
+			select(1, from<passwordGeneratorHistory>(), limit(1)));
 	const auto passwordGeneratorHistoryDelete = storage.prepare(remove_all<passwordGeneratorHistory>());
 
-	const auto secureNotesSelect = storage.prepare(select(columns(&secureNotes::folder, &secureNotes::title, &secureNotes::contents)));
-	auto secureNoteExistsCheck = storage.prepare(select(1, from<secureNotes>(), where(is_equal(&secureNotes::title, "")), limit(1)));
-	auto secureNoteInsert = storage.prepare(insert(into<secureNotes>(), columns(&secureNotes::folder, &secureNotes::title, &secureNotes::contents), values(std::make_tuple("", "", ""))));
+	const auto secureNotesSelect = storage.prepare(
+			select(columns(&secureNotes::folder, &secureNotes::title, &secureNotes::contents)));
+	auto secureNoteExistsCheck = storage.prepare(
+			select(1, from<secureNotes>(), where(is_equal(&secureNotes::title, "")), limit(1)));
+	auto secureNoteInsert = storage.prepare(
+			insert(into<secureNotes>(), columns(&secureNotes::folder, &secureNotes::title, &secureNotes::contents),
+			       values(std::make_tuple("", "", ""))));
 	const auto secureNoteEmptyCheck = storage.prepare(select(1, from<secureNotes>(), limit(1)));
 	auto secureNoteDelete = storage.prepare(remove_all<secureNotes>(where(is_equal(&secureNotes::title, ""))));
 
 	auto folderExists = storage.prepare(select(1, from<folders>(), where(is_equal(&folders::folder, "")), limit(1)));
 	const auto folderSelect = storage.prepare(select(&folders::folder));
-	auto folderExistsCheck = storage.prepare(select(1, from<folders>(), where(is_equal(&folders::folder, "")), limit(1)));
-	auto folderInsert = storage.prepare(insert(into<folders>(), columns(&folders::folder), values(std::make_tuple(""))));
+	auto folderExistsCheck = storage.prepare(
+			select(1, from<folders>(), where(is_equal(&folders::folder, "")), limit(1)));
+	auto folderInsert = storage.prepare(
+			insert(into<folders>(), columns(&folders::folder), values(std::make_tuple(""))));
 	auto folderDelete = storage.prepare(remove_all<folders>(where(is_equal(&folders::folder, ""))));
 
 	int mainMenuChoice;
