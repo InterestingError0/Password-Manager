@@ -72,62 +72,85 @@ int main() {
 		                      std::make_tuple("News/Reference"), std::make_tuple("Productivity Tools"),
 		                      std::make_tuple("None")));
 	}
+	const auto loginsSelect = storage.prepare(select(columns(&logins::folder, &logins::website, &logins::username, &logins::password)));
+	auto loginExistsCheck = storage.prepare(select(1, from<logins>(), where(is_equal(&logins::website, "") and is_equal(&logins::username, "")), limit(1)));
+	const auto loginsEmptyCheck = storage.prepare(select(1, from<logins>(), limit(1)));
+	auto loginInsert = storage.prepare(insert(into<logins>(), columns(&logins::folder, &logins::website, &logins::username, &logins::password), values(std::make_tuple("", "", "", ""))));
+	auto loginDelete = storage.prepare(remove_all<logins>(where(is_equal(&logins::website, "") and is_equal(&logins::username, ""))));
+
+	auto passwordGeneratorHistoryInsert = storage.prepare(insert(into<passwordGeneratorHistory>(), columns(&passwordGeneratorHistory::generatedPassword), values(std::make_tuple(""))));
+	const auto passwordGeneratorHistorySelect = storage.prepare(select(&passwordGeneratorHistory::generatedPassword));
+	const auto passwordGeneratorHistoryEmptyCheck = storage.prepare(select(1, from<passwordGeneratorHistory>(), limit(1)));
+	const auto passwordGeneratorHistoryDelete = storage.prepare(remove_all<passwordGeneratorHistory>());
+
+	const auto secureNotesSelect = storage.prepare(select(columns(&secureNotes::folder, &secureNotes::title, &secureNotes::contents)));
+	auto secureNoteExistsCheck = storage.prepare(select(1, from<secureNotes>(), where(is_equal(&secureNotes::title, "")), limit(1)));
+	auto secureNoteInsert = storage.prepare(insert(into<secureNotes>(), columns(&secureNotes::folder, &secureNotes::title, &secureNotes::contents), values(std::make_tuple("", "", ""))));
+	const auto secureNoteEmptyCheck = storage.prepare(select(1, from<secureNotes>(), limit(1)));
+	auto secureNoteDelete = storage.prepare(remove_all<secureNotes>(where(is_equal(&secureNotes::title, ""))));
+
+	auto folderExists = storage.prepare(select(1, from<folders>(), where(is_equal(&folders::folder, "")), limit(1)));
+	const auto folderSelect = storage.prepare(select(&folders::folder));
+	auto folderExistsCheck = storage.prepare(select(1, from<folders>(), where(is_equal(&folders::folder, "")), limit(1)));
+	auto folderInsert = storage.prepare(insert(into<folders>(), columns(&folders::folder), values(std::make_tuple(""))));
+	auto folderDelete = storage.prepare(remove_all<folders>(where(is_equal(&folders::folder, ""))));
 
 	int mainMenuChoice;
 	do {
 		std::cout
 				<< "\n\t1. Logins\n\t2. Password Generator\n\t3. Password Generator History\n\t4. Secure Notes\n\t5. Folders\n\t6. Exit\n\n";
-		mainMenuChoice = menuChoice(1, 6);
+		mainMenuChoice = menuChoice(6);
 		switch(mainMenuChoice) {
 			case 1: {
-				auto loginsVec = storage.select(
-						columns(&logins::folder, &logins::website, &logins::username, &logins::password));
+				auto loginsVec = storage.execute(loginsSelect);
 				std::cout << "Here are the logins stored in your vault:\n\n";
 				for(const auto &login: loginsVec) {
 					std::cout << "Folder: " << std::get<0>(login) << "\nWeb Address: " << std::get<1>(login)
 					          << "\nUsername: " << std::get<2>(login) << "\nPassword: " << std::get<3>(login) << "\n\n";
 				}
 				std::cout << "\t1. Store Logins\n\t2. Delete Logins\n\t3. Back to the Main Menu\n\n";
-				switch(menuChoice(1, 3)) {
+				switch(menuChoice(3)) {
 					case 1: {
-						auto foldersVec = storage.select(columns(&folders::folder));
+						auto foldersVec = storage.execute(folderSelect);
 						std::cout << "Here are the folders currently available:\n\n";
 						for(const auto &folder: foldersVec) {
-							std::cout << std::get<0>(folder) << '\n';
+							std::cout << folder << '\n';
 						}
 						std::cout << '\n';
 						std::string inputFolderName;
 						while((std::cout << "Enter the folder name: ") && (std::cin >> inputFolderName) &&
-						      storage.select(1, from<folders>(),
-						                     where(is_equal(&folders::folder, inputFolderName))).empty()) {
+						      storage.execute(folderExists).empty()) {
 							std::cout << "Invalid Input!\n\n";
 						}
 						std::vector<std::string> login{ inputFolderName };
 						login.resize(4);
 						std::cout << "Enter the web address followed by the username followed by the password: ";
 						std::cin >> login[1] >> login[2] >> login[3];
-						if(!storage.select(1, from<logins>(), where(is_equal(&logins::website, login[1]) and
-						                                            is_equal(&logins::username, login[2]))).empty()) {
+						get<1>(loginExistsCheck) = login[1].c_str();
+						get<2>(loginExistsCheck) = login[2].c_str();
+						if(!storage.execute(loginExistsCheck).empty()) {
 							std::cout << "Login with that web address and username already exists!\n\n";
 						} else {
-							storage.insert(into<logins>(),
-							               columns(&folders::folder, &logins::website, &logins::username,
-							                       &logins::password),
-							               values(std::make_tuple(login[0], login[1], login[2], login[3])));
+							get<0>(loginInsert) = login[0].c_str();
+							get<1>(loginInsert) = login[1].c_str();
+							get<2>(loginInsert) = login[2].c_str();
+							get<3>(loginInsert) = login[3].c_str();
+							storage.execute(loginInsert);
 						}
 					}
 						break;
 					case 2:
-						if(!storage.select(1, from<logins>()).empty()) {
+						if(!storage.execute(loginsEmptyCheck).empty()) {
 							std::cout << "Enter the web address followed by the username: ";
 							std::string inputWebAddress;
 							std::string inputUsername;
 							std::cin >> inputWebAddress >> inputUsername;
-							if(!storage.select(1, from<folders>(), where(is_equal(&logins::website, inputWebAddress) and
-							                                             is_equal(&logins::username,
-							                                                      inputUsername))).empty()) {
-								storage.remove_all<folders>(where(is_equal(&logins::website, inputWebAddress) and
-								                                  is_equal(&logins::username, inputUsername)));
+							get<1>(loginExistsCheck) = inputWebAddress.c_str();
+							get<2>(loginExistsCheck) = inputUsername.c_str();
+							if(!storage.execute(loginExistsCheck).empty()) {
+								get<0>(loginDelete) = inputWebAddress.c_str();
+								get<1>(loginDelete) = inputUsername.c_str();
+								storage.execute(loginDelete);
 								std::cout << "Login successfully deleted!\n\n";
 							} else {
 								std::cout << "Login doesn't exist!\n\n";
@@ -195,21 +218,20 @@ int main() {
 				}
 
 				std::cout << "The generated password is: " << generatedPassword << '\n';
-				storage.insert(into<passwordGeneratorHistory>(), columns(&passwordGeneratorHistory::generatedPassword),
-				               values(std::make_tuple(generatedPassword)));
+				get<0>(passwordGeneratorHistoryInsert) = generatedPassword.c_str();
+				storage.execute(passwordGeneratorHistoryInsert);
 			}
 				break;
 			case 3:
-				if(!storage.select(1, from<passwordGeneratorHistory>()).empty()) {
-					auto passwordGeneratorHistoryVec = storage.select(
-							columns(&passwordGeneratorHistory::generatedPassword));
+				if(!storage.execute(passwordGeneratorHistoryEmptyCheck).size()) {
+					auto passwordGeneratorHistoryVec = storage.execute(passwordGeneratorHistorySelect);
 					std::cout << '\n';
 					for(const auto &password: passwordGeneratorHistoryVec) {
-						std::cout << std::get<0>(password) << '\n';
+						std::cout << password << "\n\n";
 					}
 					std::cout << "\n\t1. Delete Password Generator History\n\t2. Back to the Main Menu\n\n";
-					if(menuChoice(1, 2) == 1) {
-						storage.remove_all<passwordGeneratorHistory>();
+					if(menuChoice(2) == 1) {
+						storage.execute(passwordGeneratorHistoryDelete);
 						std::cout << "Password generator history has been deleted!\n\n";
 					}
 				} else {
@@ -217,8 +239,7 @@ int main() {
 				}
 				break;
 			case 4: {
-				auto secureNotesVec = storage.select(
-						columns(&secureNotes::folder, &secureNotes::title, &secureNotes::contents));
+				auto secureNotesVec = storage.execute(secureNotesSelect);
 				std::cout << "Here are the secure notes stored in your vault:\n\n";
 				for(const auto &secureNote: secureNotesVec) {
 					std::cout << "Folder: " << std::get<0>(secureNote) << "\nTitle: " << std::get<1>(secureNote)
@@ -226,18 +247,17 @@ int main() {
 				}
 				std::cout << '\n';
 				std::cout << "\t1. Store Secure Notes\n\t2. Delete Secure Notes\n\t3. Back to the Main Menu\n\n";
-				switch(menuChoice(1, 3)) {
+				switch(menuChoice(3)) {
 					case 1: {
-						auto foldersVec = storage.select(columns(&folders::folder));
+						auto foldersVec = storage.execute(folderSelect);
 						std::cout << "Here are the folders currently available:\n\n";
 						for(const auto &folder: foldersVec) {
-							std::cout << std::get<0>(folder) << '\n';
+							std::cout << folder << '\n';
 						}
 						std::cout << '\n';
 						std::string inputFolderName;
 						while((std::cout << "Enter the folder name: ") && (std::cin >> inputFolderName) &&
-						      storage.select(1, from<folders>(),
-						                     where(is_equal(&folders::folder, inputFolderName))).empty()) {
+						      storage.execute(folderSelect).empty()) {
 							std::cout << "Invalid Input!\n\n";
 						}
 						std::vector<std::string> secureNote{ inputFolderName };
@@ -246,24 +266,25 @@ int main() {
 						std::getline(std::cin >> std::ws, secureNote[1]);
 						std::cout << "Enter the contents: ";
 						std::getline(std::cin >> std::ws, secureNote[2]);
-						if(!storage.select(1, from<secureNotes>(),
-						                   where(is_equal(&secureNotes::title, secureNote[1]))).empty()) {
+						get<1>(secureNoteExistsCheck) = secureNote[1].c_str();
+						if(!storage.execute(secureNoteExistsCheck).empty()) {
 							std::cout << "Secure note with title " << secureNote[1] << "already exists!\n\n";
 						} else {
-							storage.insert(into<secureNotes>(),
-							               columns(&secureNotes::folder, &secureNotes::title, &secureNotes::contents),
-							               values(std::make_tuple(secureNote[0], secureNote[1], secureNote[2])));
+							get<0>(secureNoteInsert) = secureNote[0].c_str();
+							get<1>(secureNoteInsert) = secureNote[1].c_str();
+							get<2>(secureNoteInsert) = secureNote[2].c_str();
+							storage.execute(secureNoteInsert);
 						}
 					}
 						break;
 					case 2:
-						if(!storage.select(1, from<folders>()).empty()) {
+						if(!storage.execute(secureNoteEmptyCheck).empty()) {
 							std::cout << "Enter the title of the secure note you want to delete: ";
 							std::string inputTitle;
 							std::getline(std::cin >> std::ws, inputTitle);
-							if(!storage.select(1, from<folders>(),
-							                   where(is_equal(&secureNotes::title, inputTitle))).empty()) {
-								storage.remove_all<folders>(where(is_equal(&secureNotes::title, inputTitle)));
+							if(!storage.execute(secureNoteExistsCheck).empty()) {
+								get<0>(secureNoteDelete) = inputTitle.c_str();
+								storage.execute(secureNoteDelete);
 								std::cout << "Secure note successfully deleted!\n\n";
 							} else {
 								std::cout << "Secure Note Doesn't Exist!\n\n";
@@ -276,23 +297,23 @@ int main() {
 			}
 				break;
 			case 5:
-				auto foldersVec = storage.select(columns(&folders::folder));
+				auto foldersVec = storage.execute(folderSelect);
 				std::cout << "Here are the folders currently available:\n\n";
 				for(const auto &folder: foldersVec) {
-					std::cout << std::get<0>(folder) << '\n';
+					std::cout << folder << '\n';
 				}
 				std::cout << '\n';
 				std::cout << "\t1. Add Folders\n\t2. Delete Folders\n\t3. Back to the Main Menu\n\n";
-				switch(menuChoice(1, 3)) {
+				switch(menuChoice(3)) {
 					case 1: {
 						std::string inputFolderName;
 						std::getline(std::cin >> std::ws, inputFolderName);
-						if(!storage.select(1, from<folders>(),
-						                   where(is_equal(&folders::folder, inputFolderName))).empty()) {
+						get<1>(folderExistsCheck) = inputFolderName.c_str();
+						if(!storage.execute(folderExistsCheck).empty()) {
 							std::cout << "Folder already exists!\n\n";
 						} else {
-							storage.insert(into<folders>(), columns(&folders::folder),
-							               values(std::make_tuple(inputFolderName)));
+							get<0>(folderInsert) = inputFolderName.c_str();
+							storage.execute(folderInsert);
 						}
 					}
 						break;
@@ -300,9 +321,10 @@ int main() {
 						std::string inputFolderName;
 						std::getline(std::cin >> std::ws, inputFolderName);
 						if(inputFolderName != "None") {
-							if(!storage.select(1, from<folders>(),
-							                   where(is_equal(&folders::folder, inputFolderName))).empty()) {
-								storage.remove_all<folders>(where(is_equal(&folders::folder, inputFolderName)));
+							get<1>(folderExistsCheck) = inputFolderName.c_str();
+							if(!storage.execute(folderExistsCheck).empty()) {
+								get<0>(folderDelete) = inputFolderName.c_str();
+								storage.execute(folderDelete);
 								std::cout << "Folder successfully deleted!\n\n";
 							} else {
 								std::cout << "Login doesn't exist!\n\n";

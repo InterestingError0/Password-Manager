@@ -83,9 +83,9 @@ void saveMasterPasswordToFile(const std::pair <std::string, std::string>& hashAn
     CryptoPP::StringSource(saltEncoded + hashEncoded, true, new CryptoPP::FileSink(masterPasswordPath.c_str()));
 }
 
-int menuChoice(const int lowerBound, const int upperBound) {
+int menuChoice(const int upperBound) {
 	int choice{ 0 };
-	while((std::cout << "Enter your choice: " && !(std::cin >> choice)) || (choice < lowerBound || choice > upperBound)) {
+	while((std::cout << "Enter your choice: " && !(std::cin >> choice)) || (choice < 1 || choice > upperBound)) {
 		std::cout << "Invalid Input!\n\n";
 		clearInputBuffer();
 	}
