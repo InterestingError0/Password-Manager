@@ -102,10 +102,9 @@ int main() {
     const auto secureNoteEmptyCheck = storage.prepare(select(1, from<secureNotes>(), limit(1)));
     auto secureNoteDelete = storage.prepare(remove_all<secureNotes>(where(is_equal(&secureNotes::title, ""))));
 
-    auto folderExists = storage.prepare(select(1, from<folders>(), where(is_equal(&folders::folder, "")), limit(1)));
-    const auto folderSelect = storage.prepare(select(&folders::folder));
-    auto folderExistsCheck = storage.prepare(
+    auto folderExists = storage.prepare(
             select(1, from<folders>(), where(is_equal(&folders::folder, "")), limit(1)));
+    const auto folderSelect = storage.prepare(select(&folders::folder));
     auto folderInsert = storage.prepare(
             insert(into<folders>(), columns(&folders::folder), values(std::make_tuple(""))));
     auto folderDelete = storage.prepare(remove_all<folders>(where(is_equal(&folders::folder, ""))));
@@ -133,9 +132,13 @@ int main() {
                         }
                         std::cout << '\n';
                         std::string inputFolderName;
-                        while((std::cout << "Enter the folder name: ") && (std::cin >> inputFolderName) &&
-                              storage.execute(folderExists).empty()) {
-                            std::cout << "Invalid Input!\n\n";
+                        while((std::cout << "Enter the folder name: ") && (std::cin >> inputFolderName)) {
+                            get<1>(folderExists) = inputFolderName.c_str();
+                            if(storage.execute(folderExists).empty()) {
+                                std::cout << "Invalid Input!\n\n";
+                            } else {
+                                break;
+                            }
                         }
                         std::vector<std::string> login{ inputFolderName };
                         login.resize(4);
@@ -322,9 +325,10 @@ int main() {
                 switch(menuChoice(3)) {
                     case 1: {
                         std::string inputFolderName;
+                        std::cout << "Enter the name of the folder you would like to add: ";
                         std::getline(std::cin >> std::ws, inputFolderName);
-                        get<1>(folderExistsCheck) = inputFolderName.c_str();
-                        if(!storage.execute(folderExistsCheck).empty()) {
+                        get<1>(folderExists) = inputFolderName.c_str();
+                        if(!storage.execute(folderExists).empty()) {
                             std::cout << "Folder already exists!\n\n";
                         } else {
                             get<0>(folderInsert) = inputFolderName.c_str();
@@ -334,15 +338,16 @@ int main() {
                         break;
                     case 2:
                         std::string inputFolderName;
+                        std::cout << "Enter the name of the folder you would like to delete: ";
                         std::getline(std::cin >> std::ws, inputFolderName);
                         if(inputFolderName != "None") {
-                            get<1>(folderExistsCheck) = inputFolderName.c_str();
-                            if(!storage.execute(folderExistsCheck).empty()) {
+                            get<1>(folderExists) = inputFolderName.c_str();
+                            if(!storage.execute(folderExists).empty()) {
                                 get<0>(folderDelete) = inputFolderName.c_str();
                                 storage.execute(folderDelete);
                                 std::cout << "Folder successfully deleted!\n\n";
                             } else {
-                                std::cout << "Login doesn't exist!\n\n";
+                                std::cout << "Folder doesn't exist!\n\n";
                             }
                         } else {
                             std::cout << "ERROR: That folder cannot be deleted.\n\n";
