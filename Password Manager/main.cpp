@@ -238,7 +238,7 @@ int main() {
 			}
 				break;
 			case 3:
-				if(!storage.execute(passwordGeneratorHistoryEmptyCheck).size()) {
+				if(!storage.execute(passwordGeneratorHistoryEmptyCheck).empty()) {
 					auto passwordGeneratorHistoryVec = storage.execute(passwordGeneratorHistorySelect);
 					std::cout << '\n';
 					for(const auto &password: passwordGeneratorHistoryVec) {
