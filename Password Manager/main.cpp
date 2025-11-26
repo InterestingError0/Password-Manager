@@ -9,8 +9,8 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include "/usr/local/include/sqlite3.h"
 #include "sqlite_orm/sqlite_orm.h"
-#include "sqlcipher/sqlite3.h"
 
 struct logins {
     int id;
