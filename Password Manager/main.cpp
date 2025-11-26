@@ -3,12 +3,10 @@
 
 #include "constants.hpp"
 #include "miscellaneousFunctions.hpp"
-#include "cryptographyFunctions.hpp"
 #include "loginScreen.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
-#include <thread>
 #include "/usr/local/include/sqlite3.h"
 #include "sqlite_orm/sqlite_orm.h"
 
